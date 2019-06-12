@@ -1,0 +1,17 @@
+%PROTOTIPO DEI FATTI
+%pezzo(nomePezzo,colorePezzo,coordinataX,coordinataY). focus(nomePezzoCliccato,colorePezzoCliccato,coordinataXPezzoCliccato,coordinataYPezzoCliccato).
+
+focus(cavallo,bianco,4,4). pezzo(alfiere,bianco,6,3).
+
+alleato(X,Y):-pezzo(_,bianco,X,Y).
+
+move(P,C,X,Y):-near(X,Y), focus(P,C,A,B), A!=X, B!=Y.
+
+near(X,Y):-focus(_,_,A,B), not alleato(X,Y), X=A-1,Y=B-2.
+near(X,Y):-focus(_,_,A,B), not alleato(X,Y), X=A+1,Y=B-2.
+near(X,Y):-focus(_,_,A,B), not alleato(X,Y), X=A-1,Y=B+2.
+near(X,Y):-focus(_,_,A,B), not alleato(X,Y), X=A+1,Y=B+2.
+near(X,Y):-focus(_,_,A,B), not alleato(X,Y), X=A-2,Y=B-1.
+near(X,Y):-focus(_,_,A,B), not alleato(X,Y), X=A-2,Y=B+1.
+near(X,Y):-focus(_,_,A,B), not alleato(X,Y), X=A+2,Y=B-1.
+near(X,Y):-focus(_,_,A,B), not alleato(X,Y), X=A+2,Y=B+1.
