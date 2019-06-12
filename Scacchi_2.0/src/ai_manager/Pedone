@@ -1,0 +1,17 @@
+% TIPOLOGIA DI INPUT
+%pezzo(pedone,colore,PosizioneX,PosizioneY).
+
+%FATTI (DA AGGIUSTARE IL FATTO D'IDENTITA')
+focus(pedone,bianco,5,0).
+pezzo(torre,bianco,2,5). pezzo(pedone,nero,3,5).
+
+%MI CONTROLLO QUALE CELLA E' OCCUPATA
+occupata(X,Y):-pezzo(_,_,X,Y).
+nemico(X,Y):-pezzo(_,nero,X,Y).
+alleato(X,Y):-pezzo(_,bianco,X,Y).
+
+%GENERAZIONE DELLE POSIZIONI RAGGIUNGIBILI
+move(P,bianco,X,4):-focus(P,bianco,X,6),not occupata(X,4),not occupata(X,5).
+move(P,bianco,X,Y):-focus(P,bianco,X,Z),Y=Z-1, not occupata(X,Y), Y>=0.
+move(P,bianco,X,Y):-focus(P,bianco,A,B),X=A-1,Y=B-1,nemico(X,Y).
+move(P,bianco,X,Y):-focus(P,bianco,A,B),X=A+1,Y=B-1,nemico(X,Y).

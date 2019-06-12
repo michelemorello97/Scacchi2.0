@@ -1,0 +1,94 @@
+
+focus(re,bianco,4,4).
+pezzo(torre,nero,1,4).
+pezzo(cavallo,nero,3,1).
+pezzo(alfiere,nero,2,2).
+pezzo(reggina,nero,1,6).
+pezzo(pedone,nero,3,2).
+
+%CALCOLO DEI POSSIBILI OSTACOLI
+alleato(X,Y):-pezzo(_,bianco,X,Y).
+nemico(X,Y):-pezzo(_,nero,X,Y).
+
+%CALCOLO DEI MOVIMENTI
+move(P,C,X,Y):-focus(P,C,A,B),not alleato(X,Y), not pericolo(X,Y), X=A-1, Y=B-1.
+move(P,C,X,Y):-focus(P,C,A,B),not alleato(X,Y), not pericolo(X,Y), X=A-1, Y=B.
+move(P,C,X,Y):-focus(P,C,A,B),not alleato(X,Y), not pericolo(X,Y), X=A-1, Y=B+1.
+move(P,C,X,Y):-focus(P,C,A,B),not alleato(X,Y), not pericolo(X,Y), X=A, Y=B-1.
+move(P,C,X,Y):-focus(P,C,A,B),not alleato(X,Y), not pericolo(X,Y), X=A, Y=B+1.
+move(P,C,X,Y):-focus(P,C,A,B),not alleato(X,Y), not pericolo(X,Y), X=A+1, Y=B-1.
+move(P,C,X,Y):-focus(P,C,A,B),not alleato(X,Y), not pericolo(X,Y), X=A+1, Y=B.
+move(P,C,X,Y):-focus(P,C,A,B),not alleato(X,Y), not pericolo(X,Y), X=A+1, Y=B+1.
+
+%CALCOLO DELLE CELLE PERICOLOSE DELLA TORRE
+moveE(X,Y):-nearVtorre(X,Y).
+moveE(X,Y):-nearOtorre(X,Y).
+
+%CALCOLO DEI NEAR ORIZZONTALI
+nearOtorre(X,Y):-pezzo(torre,nero,X,Y).
+nearOtorre(X,Y):-nearOtorre(A,Y),X=A+1, not alleato(A,Y), not nemico(X,Y), X<8.
+nearOtorre(X,Y):-nearOtorre(A,Y),X=A-1, not alleato(A,Y), not nemico(X,Y) ,X>=0.
+
+%CALCOLO DEI NEAR VERTICALI
+nearVtorre(X,Y):-pezzo(torre,nero,X,Y).
+nearVtorre(X,Y):-nearVtorre(X,A),Y=A+1, not alleato(X,A) , not nemico(X,Y), Y<8.
+nearVtorre(X,Y):-nearVtorre(X,A),Y=A-1, not alleato(X,A) , not nemico(X,Y), Y>=0.
+
+%CALCOLO DELLE CELLE PERICOLOSE DEL CAVALLO
+moveE(X,Y):-nearCavallo(X,Y).
+
+%CALCOLO DEI NEAR DEL CAVALLO
+nearCavallo(X,Y):-pezzo(cavallo,nero,A,B), not nemico(X,Y), X=A-1, Y=B-2, X>=0, Y>=0.
+nearCavallo(X,Y):-pezzo(cavallo,nero,A,B), not nemico(X,Y), X=A+1, Y=B-2, X<8, Y>=0.
+nearCavallo(X,Y):-pezzo(cavallo,nero,A,B), not nemico(X,Y), X=A-1, Y=B+2, X>=0, Y<8.
+nearCavallo(X,Y):-pezzo(cavallo,nero,A,B), not nemico(X,Y), X=A+1, Y=B+2, X<8, Y<8.
+nearCavallo(X,Y):-pezzo(cavallo,nero,A,B), not nemico(X,Y), X=A-2, Y=B-1, X>=0, Y>=0.
+nearCavallo(X,Y):-pezzo(cavallo,nero,A,B), not nemico(X,Y), X=A-2, Y=B+1, X>=0, Y<8.
+nearCavallo(X,Y):-pezzo(cavallo,nero,A,B), not nemico(X,Y), X=A+2, Y=B-1, X<8, Y>=0.
+nearCavallo(X,Y):-pezzo(cavallo,nero,A,B), not nemico(X,Y), X=A+2, Y=B+1, X<8, Y<8.
+
+%CALCOLO DELLE MOSSE DELL'ALFIERE
+moveE(X,Y):-pezzo(alfiere,nero,A,B), diagonaleAlfiereP(X,Y).
+moveE(X,Y):-pezzo(alfiere,nero,A,B), diagonaleAlfiereS(X,Y).
+
+%DIAGONALE PRINCIPALE
+diagonaleAlfiereP(X,Y):-pezzo(alfiere,nero,X,Y).
+diagonaleAlfiereP(X,Y):-diagonaleAlfiereP(A,B), not nemico(X,Y), not alleato(A,B), X=A+1, Y=B+1, X<8, Y<8.
+diagonaleAlfiereP(X,Y):-diagonaleAlfiereP(A,B), not nemico(X,Y), not alleato(A,B), X=A-1, Y=B-1, X>=0, Y>=0.
+
+%DIAGONALE SECONDARIA
+diagonaleAlfiereS(X,Y):-pezzo(alfiere,nero,X,Y).
+diagonaleAlfiereS(X,Y):-diagonaleAlfiereS(A,B), not nemico(X,Y), not alleato(A,B), X=A+1, Y=B-1, X<8, Y>=0.
+diagonaleAlfiereS(X,Y):-diagonaleAlfiereS(A,B), not nemico(X,Y), not alleato(A,B), X=A-1, Y=B+1, Y<8, X>=0.
+
+%CALCOLO DELLE MOSSE DELLA REGGINA
+moveE(X,Y):-pezzo(reggina,nero,A,B), nearRegginaO(X,Y), A!=X.
+moveE(X,Y):-pezzo(reggina,nero,A,B), nearRegginaV(X,Y), B!=Y.
+moveE(X,Y):-pezzo(reggina,nero,A,B), diagonaleRegginaP(X,Y), A!=X, B!=Y.
+moveE(X,Y):-pezzo(reggina,nero,A,B), diagonaleRegginaS(X,Y), A!=X, B!=Y.
+
+%NEAR ORIZZONTALI
+nearRegginaO(X,Y):-pezzo(reggina,nero,X,Y).
+nearRegginaO(X,Y):-nearRegginaO(A,Y), not nemico(X,Y), not alleato(A,Y), X=A+1, X<8.
+nearRegginaO(X,Y):-nearRegginaO(A,Y), not nemico(X,Y), not alleato(A,Y), X=A-1, X>=0.
+
+%NEAR VERTICALI
+nearRegginaV(X,Y):-pezzo(reggina,nero,X,Y).
+nearRegginaV(X,Y):-nearRegginaV(X,B), not nemico(X,Y), not alleato(X,B), Y=B+1, Y<8.
+nearRegginaV(X,Y):-nearRegginaV(X,B), not nemico(X,Y), not alleato(X,B), Y=B-1, Y>=0.
+
+%DIAGONALE PRINCIPALE
+diagonaleRegginaP(X,Y):-pezzo(reggina,nero,X,Y).
+diagonaleRegginaP(X,Y):-diagonaleRegginaP(A,B), not nemico(X,Y), not alleato(A,B), X=A+1, Y=B+1, X<8, Y<8.
+diagonaleRegginaP(X,Y):-diagonaleRegginaP(A,B), not nemico(X,Y), not alleato(A,B), X=A-1, Y=B-1, X>=0, Y>=0.
+
+%DIAGONALE SECONDARIA
+diagonaleRegginaS(X,Y):-pezzo(reggina,nero,X,Y).
+diagonaleRegginaS(X,Y):-diagonaleRegginaS(A,B), not nemico(X,Y), not alleato(A,B), X=A-1, Y=B+1, X>=0, Y<8.
+diagonaleRegginaS(X,Y):-diagonaleRegginaS(A,B), not nemico(X,Y), not alleato(A,B), X=A+1, Y=B-1, Y>=0, X<8.
+
+%CALCOLO DELLE MOSSE DEI PEDONI
+moveE(X,Y):-pezzo(pedone,nero,A,B), Y=B+1, X=A+1.
+moveE(X,Y):-pezzo(pedone,nero,A,B), Y=A+1, X=A-1.
+%TRASFORMO TUTTE LE MOSSE DEL NEMICO IN CELLE PERICOLO
+pericolo(X,Y):-moveE(X,Y).

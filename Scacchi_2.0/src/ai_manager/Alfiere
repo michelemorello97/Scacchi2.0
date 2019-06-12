@@ -1,0 +1,19 @@
+%PROTOTIPO DEI FATTI
+%pezzo(nomePezzo,colorePezzo,coordinataX,coordinataY).
+focus(alfiere,bianco,4,4).
+pezzo(torre,bianco,5,5).
+
+alleato(X,Y):-pezzo(_,bianco,X,Y).
+nemico(X,Y):-pezzo(_,nero,X,Y).
+
+move(alfiere,bianco,X,Y):-focus(alfiere,bianco,A,B), diagonaleP(X,Y), A!=X, B!=Y.
+move(alfiere,bianco,X,Y):-focus(alfiere,bianco,A,B), diagonaleS(X,Y), A!=X, B!=Y.
+
+diagonaleP(X,Y):-focus(alfiere,bianco,X,Y).
+diagonaleP(X,Y):-diagonaleP(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B+1, X<8, Y<8.
+diagonaleP(X,Y):-diagonaleP(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B-1, X>=0, Y>=0.
+
+diagonaleS(X,Y):-focus(alfiere,bianco,X,Y).
+diagonaleS(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B-1, X<8, Y>=0.
+diagonaleS(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B+1, Y<8, X>=0.
+
