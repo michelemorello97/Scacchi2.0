@@ -1,5 +1,6 @@
 package graphic;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
@@ -10,6 +11,7 @@ import javax.swing.JPanel;
 
 import GameManager.GameManager;
 import interfaces.Colore;
+import model.Move;
 
 public class ChessPanel extends JPanel{
 
@@ -30,6 +32,7 @@ public class ChessPanel extends JPanel{
 	Image pedone_nero;
 	Image bianco;
 	Image marrone;
+	Image mossaPossibile;
 	boolean scaccoAlReBianco;
 	boolean scaccoAlReNero;
 	MouseListener ml;
@@ -41,25 +44,8 @@ public class ChessPanel extends JPanel{
 		this.addMouseListener(gm);
 		scaccoAlReBianco=false;
 		scaccoAlReNero=false;
-		try {
-			regina_bianca = ImageIO.read(getClass().getResource("../resources/reginaBianca.png"));
-			regina_nera = ImageIO.read(getClass().getResource("../resources/reginaNera.png"));
-			re_bianco = ImageIO.read(getClass().getResource("../resources/reBianco.png"));
-			re_nero = ImageIO.read(getClass().getResource("../resources/reNero.png"));
-			alfiere_bianco = ImageIO.read(getClass().getResource("../resources/alfiereBianco.png"));
-			alfiere_nero = ImageIO.read(getClass().getResource("../resources/alfiereNero.png"));
-			cavallo_bianco = ImageIO.read(getClass().getResource("../resources/cavalloBianco.png"));
-			cavallo_nero = ImageIO.read(getClass().getResource("../resources/cavalloNero.png"));
-			torre_bianca = ImageIO.read(getClass().getResource("../resources/torreBianca.png"));
-			torre_nera = ImageIO.read(getClass().getResource("../resources/torreNera.png"));
-			pedone_bianco = ImageIO.read(getClass().getResource("../resources/pedoneBianco.png"));
-			pedone_nero = ImageIO.read(getClass().getResource("../resources/pedoneNero.png"));
-			bianco=ImageIO.read(getClass().getResource("../resources/bianco.png"));
-			marrone=ImageIO.read(getClass().getResource("../resources/marrone.png"));
-			}
-			catch (Exception e) {
-				// TODO: handle exception
-			}
+		loadImage();
+		
 		turno="bianco";
 		this.setSize(w, h);
 		
@@ -80,39 +66,38 @@ public class ChessPanel extends JPanel{
 				else
 					g.drawImage(marrone, j*div, i*div, div, div, null);
 				
-				
 				if(gm.getPezzo(i, j)!=null) {
 				if(gm.getPezzo(i, j).getTipo()=="regina") {
-					if(gm.getPezzo(i, j).getColore()=="bianco")
+					if(gm.getPezzo(i, j).getC()=="bianco")
 						g.drawImage(regina_bianca, j*div+21, i*div+7, null);
 					else
 						g.drawImage(regina_nera, j*div+21, i*div+7, null);
 				}
 				else if(gm.getPezzo(i, j).getTipo()=="re") {
-					if(gm.getPezzo(i, j).getColore()=="bianco")
+					if(gm.getPezzo(i, j).getC()=="bianco")
 						g.drawImage(re_bianco, j*div+21, i*div+4, null);
 					else
 						g.drawImage(re_nero, j*div+21, i*div+4, null);
 				}
 				else if(gm.getPezzo(i, j).getTipo().contains("tor")) {
-					if(gm.getPezzo(i, j).getColore()=="bianco")
+					if(gm.getPezzo(i, j).getC()=="bianco")
 						g.drawImage(torre_bianca, j*div+21, i*div+7, null);
 					else
 						g.drawImage(torre_nera, j*div+21, i*div+7, null);
 				}
 				else if(gm.getPezzo(i, j).getTipo().contains("cav")) {
-					if(gm.getPezzo(i, j).getColore()=="bianco")
+					if(gm.getPezzo(i, j).getC()=="bianco")
 						g.drawImage(cavallo_bianco, j*div+18, i*div+5, null);
 					else
 						g.drawImage(cavallo_nero, j*div+18, i*div+5, null);
 				}
 				else if(gm.getPezzo(i, j).getTipo().contains("alf")) {
-					if(gm.getPezzo(i, j).getColore()=="bianco")
+					if(gm.getPezzo(i, j).getC()=="bianco")
 						g.drawImage(alfiere_bianco, j*div+21, i*div+4, null);
 					else
 						g.drawImage(alfiere_nero, j*div+21, i*div+4, null);
 				}
-				else if(gm.getPezzo(i, j).getColore()=="bianco")
+				else if(gm.getPezzo(i, j).getC()=="bianco")
 						g.drawImage(pedone_bianco, j*div+23, i*div+14, null);
 				else
 						g.drawImage(pedone_nero, j*div+23, i*div+14, null);
@@ -122,8 +107,11 @@ public class ChessPanel extends JPanel{
 			
 			
 		}
-		
-		
+		g.setColor(Color.GREEN);
+		if(gm.getMossePossibili().size()!=0)
+			for(Move m: gm.getMossePossibili()) {
+				g.fillOval((m.getX()*div)+29, (m.getY()*div)+29, 22, 22);
+			}
 		
 		
 	}
@@ -140,6 +128,26 @@ public class ChessPanel extends JPanel{
 	}
 
 
-	
+	public void loadImage() {
+		try {
+			regina_bianca = ImageIO.read(getClass().getResource("../resources/reginaBianca.png"));
+			regina_nera = ImageIO.read(getClass().getResource("../resources/reginaNera.png"));
+			re_bianco = ImageIO.read(getClass().getResource("../resources/reBianco.png"));
+			re_nero = ImageIO.read(getClass().getResource("../resources/reNero.png"));
+			alfiere_bianco = ImageIO.read(getClass().getResource("../resources/alfiereBianco.png"));
+			alfiere_nero = ImageIO.read(getClass().getResource("../resources/alfiereNero.png"));
+			cavallo_bianco = ImageIO.read(getClass().getResource("../resources/cavalloBianco.png"));
+			cavallo_nero = ImageIO.read(getClass().getResource("../resources/cavalloNero.png"));
+			torre_bianca = ImageIO.read(getClass().getResource("../resources/torreBianca.png"));
+			torre_nera = ImageIO.read(getClass().getResource("../resources/torreNera.png"));
+			pedone_bianco = ImageIO.read(getClass().getResource("../resources/pedoneBianco.png"));
+			pedone_nero = ImageIO.read(getClass().getResource("../resources/pedoneNero.png"));
+			bianco=ImageIO.read(getClass().getResource("../resources/bianco.png"));
+			marrone=ImageIO.read(getClass().getResource("../resources/marrone.png"));
+			mossaPossibile=ImageIO.read(getClass().getResource("/home/michele/git/Scacchi2.0/Scacchi_2.0/src/resources/mossa_permessa.png"));
+			}
+			catch (Exception e) {
+				// TODO: handle exception
+			}	}
 	
 }

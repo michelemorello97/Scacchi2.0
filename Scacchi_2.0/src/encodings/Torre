@@ -1,0 +1,25 @@
+%PROTOTIO DEI FATTI
+%pezzo(nomePezzo,colorePezzo,coordinataX,coordinataY).
+
+%FATTI
+focus(torre,bianco,4,4).
+pezzo(pedone,nero,0,4).
+
+%HO SDOPPIATO LA CELLA OCCUPATA PERCHE' TI FERMI IN ENTRAMBI I CASI, MA SUI BIANCHI TI FERMI PRIMA DI MANGIARLI
+nemico(X,Y):-pezzo(_,nero,X,Y).
+alleato(X,Y):-pezzo(_,bianco,X,Y).
+
+%PER CALCOLARMI I MOIMENTI IN BASE AI NEAR, PRIMA VERTICALE E POI ORIZZONTALE
+move(P,bianco,X,Y):-focus(P,bianco,X,B), nearV(X,Y), B!=Y.
+move(P,bianco,X,Y):-focus(P,bianco,A,Y), nearO(X,Y), A!=X.
+
+%CALCOLO DEI NEAR ORIZZONTALI
+nearO(X,Y):-focus(P,bianco,X,Y).
+nearO(X,Y):-nearO(A,Y),X=A+1, not nemico(A,Y), not alleato(X,Y), X<8.
+nearO(X,Y):-nearO(A,Y),X=A-1, not nemico(A,Y), not alleato(X,Y) ,X>=0.
+
+%CALCOLO DEI NEAR VERTICALI
+nearV(X,Y):-focus(P,bianco,X,Y).
+nearV(X,Y):-nearV(X,A),Y=A+1, not nemico(X,A) , not alleato(X,Y), Y<8.
+nearV(X,Y):-nearV(X,A),Y=A-1, not nemico(X,A) , not alleato(X,Y), Y>=0.
+ 

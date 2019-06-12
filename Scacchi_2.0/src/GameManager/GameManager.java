@@ -3,10 +3,12 @@ package GameManager;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedList;
 
 import ai_manager.Ai_Manager;
 import graphic.ChessPanel;
 import interfaces.Colore;
+import model.Move;
 import model.Pezzo;
 
 public class GameManager implements MouseListener{
@@ -14,9 +16,24 @@ public class GameManager implements MouseListener{
 	Pezzo[][] scacchiera;
 	ChessPanel panel;
 	Ai_Manager ai;
+	Pezzo focus;
+	LinkedList<Move> mossePossibili;
 	public GameManager(ChessPanel panel) {
+		
+		mossePossibili=new LinkedList<>();
 		this.panel=panel;
 		ai=new Ai_Manager();
+		initScacchiera();
+				
+		panel.repaint();
+	}
+	
+	public Pezzo getPezzo(int i, int j) {
+		return scacchiera[i][j];
+	}
+
+	
+	public void initScacchiera() {
 		scacchiera=new Pezzo[8][8];
 		for(int i=0; i<8; i++) {
 			scacchiera[1][i]=new Pezzo("pedone"+i, "nero", i, 1);
@@ -39,30 +56,35 @@ public class GameManager implements MouseListener{
 		scacchiera[7][5]=new Pezzo("alfiere1", "bianco", 5, 7);
 		scacchiera[7][3]=new Pezzo("regina", "bianco", 3, 7);
 		scacchiera[7][4]=new Pezzo("re", "bianco", 4, 7);
-		
-		panel.repaint();
 	}
 	
-	public Pezzo getPezzo(int i, int j) {
-		return scacchiera[i][j];
-	}
-
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		int x=e.getX()/80;
 		int y=e.getY()/80;
-		if(scacchiera[y][x]!=null){
-			ai.load("/home/michele/Scrivania/Intelligenza_Artificiale/test");
-			try {
-				ai.start();
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-					| NoSuchMethodException | SecurityException | InstantiationException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+		if(scacchiera[y][x]!=null && scacchiera[y][x].getC()=="bianco"){
+			focus=scacchiera[y][x];
+			
+			if(focus.getTipo().contains("pedone"))
+				mossePedone();
+				
 		}
 		
 		
+		else if(focus!=null)
+			checkAndMove(x, y);
+			
+			
+		
+	}
+
+	public LinkedList<Move> getMossePossibili() {
+		return mossePossibili;
+	}
+
+	public void setMossePossibili(LinkedList<Move> mossePossibili) {
+		this.mossePossibili = mossePossibili;
 	}
 
 	@Override
@@ -90,4 +112,44 @@ public class GameManager implements MouseListener{
 	}
 	
 	
+	public void mossePedone() {
+		caricaScacchiera();
+	
+		ai.addFocusFact(focus);
+		
+		ai.load("/home/michele/git/Scacchi2.0/Scacchi_2.0/src/encodings/Pedone");
+		try {
+			mossePossibili.clear();
+			mossePossibili=ai.start();
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException | InstantiationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		System.out.println(mossePossibili);
+		panel.repaint();
+	}
+	
+	public void checkAndMove(int x, int y) {
+		for(Move m: mossePossibili) {
+			if(m.getX()==x && m.getY()==y) {
+				scacchiera[focus.getY()][focus.getX()]=null;
+				focus.setX(x);
+				focus.setY(y);
+				scacchiera[y][x]=focus;
+				focus=null;
+				mossePossibili.clear();
+				panel.repaint();
+			}
+		}
+	}
+	
+	public void caricaScacchiera() {
+		for(int i=0; i<8; i++) {
+			for(int j=0; j<8; j++) {
+				if(scacchiera[i][j]!=null && (i!=focus.getY() || j!=focus.getX()))
+					ai.newFacts(scacchiera[i][j]);
+			}
+		}
+	}
 }

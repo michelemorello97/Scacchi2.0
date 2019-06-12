@@ -1,6 +1,5 @@
 package model;
 
-import interfaces.Colore;
 import it.unical.mat.embasp.languages.Id;
 import it.unical.mat.embasp.languages.Param;
 @Id("pezzo")
@@ -16,6 +15,10 @@ public class Pezzo {
 	
 	@Param(3)
 	int y;
+	
+	public Pezzo() {
+		
+	}
 	public Pezzo(String tipo, String colore, int x, int y) {
 		this.tipo=tipo;
 		this.c=colore;
@@ -38,7 +41,7 @@ public class Pezzo {
 		return tipo;
 	}
 	
-	public String getColore() {
+	public String getC() {
 		return c;
 	}
 
