@@ -1,28 +1,28 @@
 %PROTOTIPO DEI FATTI
 %focus(tipoPezzoCliccato,colorePezzoCliccato,coordinataXPezzoCliccato,coordinataYPezzoCliccato). pezzo(tipoPezzo,colorePezzo,coordinataX,coordinataY).
 
-focus(reggina,bianco,4,4). pezzo(alfiere,nero,6,6).
+%focus("reggina",0,"bianco",4,4). pezzo("alfiere",0,"nero",6,6).
 
-alleato(X,Y):-pezzo(_,bianco,X,Y).
-nemico(X,Y):-pezzo(_,nero,X,Y).
+alleato(X,Y):-pezzo(_,_,"bianco",X,Y).
+nemico(X,Y):-pezzo(_,_,"nero",X,Y).
 
-move(P,C,X,Y):-focus(P,C,A,B), nearO(X,Y), A!=X.
-move(P,C,X,Y):-focus(P,C,A,B), nearV(X,Y), B!=Y.
-move(P,C,X,Y):-focus(P,C,A,B), diagonaleP(X,Y), A!=X, B!=Y.
-move(P,C,X,Y):-focus(P,C,A,B), diagonaleS(X,Y), A!=X, B!=Y.
+move(P,I,C,X,Y):-focus(P,I,C,A,B), nearO(X,Y), A!=X.
+move(P,I,C,X,Y):-focus(P,I,C,A,B), nearV(X,Y), B!=Y.
+move(P,I,C,X,Y):-focus(P,I,C,A,B), diagonaleP(X,Y), A!=X, B!=Y.
+move(P,I,C,X,Y):-focus(P,I,C,A,B), diagonaleS(X,Y), A!=X, B!=Y.
 
-nearO(X,Y):-focus(P,C,X,Y).
+nearO(X,Y):-focus(P,I,C,X,Y).
 nearO(X,Y):-nearO(A,Y), not alleato(X,Y), not nemico(A,Y), X=A+1, X<8.
 nearO(X,Y):-nearO(A,Y), not alleato(X,Y), not nemico(A,Y), X=A-1, X>=0.
 
-nearV(X,Y):-focus(P,C,X,Y).
+nearV(X,Y):-focus(P,I,C,X,Y).
 nearV(X,Y):-nearV(X,B), not alleato(X,Y), not nemico(X,B), Y=B+1, Y<8.
 nearV(X,Y):-nearV(X,B), not alleato(X,Y), not nemico(X,B), Y=B-1, Y>=0.
 
-diagonaleP(X,Y):-focus(P,C,X,Y).
+diagonaleP(X,Y):-focus(P,I,C,X,Y).
 diagonaleP(X,Y):-diagonaleP(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B+1, X<8, Y<8.
 diagonaleP(X,Y):-diagonaleP(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B-1, X>=0, Y>=0.
 
-diagonaleS(X,Y):-focus(P,C,X,Y).
+diagonaleS(X,Y):-focus(P,I,C,X,Y).
 diagonaleS(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B+1, X>=0, Y<8.
 diagonales(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B-1, Y>=0, X<8.
