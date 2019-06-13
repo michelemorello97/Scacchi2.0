@@ -1,6 +1,6 @@
 
-focus("re","bianco",4,4).
-pezzo("torre",0,"nero",0,4).
+%focus("re","bianco",4,4).
+%pezzo("torre",0,"nero",0,4).
 %pezzo("torre",1,"nero",4,0).
 %pezzo("cavallo","nero",3,1).
 %pezzo("alfiere","nero",2,2).
