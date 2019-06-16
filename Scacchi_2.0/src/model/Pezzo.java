@@ -8,19 +8,23 @@ public class Pezzo {
 	String tipo;
 	
 	@Param(1)
-	String c;
+	int index;
 	
 	@Param(2)
-	int x;
+	String c;
 	
 	@Param(3)
+	int x;
+	
+	@Param(4)
 	int y;
 	
 	public Pezzo() {
 		
 	}
-	public Pezzo(String tipo, String colore, int x, int y) {
+	public Pezzo(String tipo, int index, String colore, int x, int y) {
 		this.tipo=tipo;
+		this.index=index;
 		this.c=colore;
 		this.x=x;
 		this.y=y;
@@ -28,13 +32,14 @@ public class Pezzo {
 	
 	public Pezzo(Pezzo p) {
 		this.tipo=p.tipo;
+		this.index=p.index;
 		this.c=p.c;
 		this.x=p.x;
 		this.y=p.y;
 	}
 	@Override
 	public String toString() {
-		return "Pezzo [tipo=" + tipo + ", c=" + c + ", x=" + x + ", y=" + y + "]";
+		return "Pezzo [tipo=" + tipo + ", index= "+ index + ", c=" + c + ", x=" + x + ", y=" + y + "]";
 	}
 
 	public String getTipo() {
@@ -68,5 +73,11 @@ public class Pezzo {
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+	public int getIndex() {
+		return index;
+	}
+	public void setIndex(int index) {
+		this.index = index;
 	}
 }

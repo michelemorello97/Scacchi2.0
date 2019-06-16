@@ -24,5 +24,11 @@ diagonaleP(X,Y):-diagonaleP(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B+
 diagonaleP(X,Y):-diagonaleP(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B-1, X>=0, Y>=0.
 
 diagonaleS(X,Y):-focus(P,I,C,X,Y).
-diagonaleS(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B+1, X>=0, Y<8.
-diagonales(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B-1, Y>=0, X<8.
+diagonaleS(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B-1, X<8, Y>=0.
+diagonaleS(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B+1, Y<8, X>=0.
+
+
+
+%diagonaleS(X,Y):-focus(P,I,C,X,Y).
+%diagonaleS(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B+1, X>=0, Y<8.
+%diagonales(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B-1, Y>=0, X<8.

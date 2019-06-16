@@ -86,10 +86,14 @@ public class Ai_Manager {
 		
 		
 		handler.removeProgram(facts);
-		facts.clearAll();
 		handler.removeProgram(program);
+		program.clearFilesPaths();
+		facts.clearAll();
+		
 		
 		return m;
 	}
+	
+	
 }
 

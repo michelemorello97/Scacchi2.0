@@ -10,12 +10,15 @@ public class Focus {
 	String tipo;
 	
 	@Param(1)
-	String c;
+	int index;
 	
 	@Param(2)
-	int x;
+	String c;
 	
 	@Param(3)
+	int x;
+	
+	@Param(4)
 	int y;
 	
 	public Focus() { 
@@ -24,6 +27,7 @@ public class Focus {
 	
 	public Focus(Pezzo p) {
 		this.tipo=p.tipo;
+		this.index=p.index;
 		this.c=p.c;
 		this.x=p.x;
 		this.y=p.y;
@@ -31,6 +35,7 @@ public class Focus {
 	
 	public Focus(Focus p) {
 		this.tipo=p.tipo;
+		this.index=p.index;
 		this.c=p.c;
 		this.x=p.x;
 		this.y=p.y;
@@ -70,6 +75,14 @@ public class Focus {
 	
 	@Override
 	public String toString() {
-		return "Focus [tipo=" + tipo + ", c=" + c + ", x=" + x + ", y=" + y + "]";
+		return "Focus [tipo=" + tipo + ", index= "+ index + ", c=" + c + ", x=" + x + ", y=" + y + "]";
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 }

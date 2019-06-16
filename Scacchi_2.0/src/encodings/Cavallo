@@ -1,7 +1,8 @@
 %PROTOTIPO DEI FATTI
 %pezzo(nomePezzo,colorePezzo,coordinataX,coordinataY). focus(nomePezzoCliccato,colorePezzoCliccato,coordinataXPezzoCliccato,coordinataYPezzoCliccato).
 
-focus("cavallo",0,"bianco",4,4). pezzo("alfiere",0,"bianco",6,3).
+%focus("cavallo",0,"bianco",4,4). 
+%pezzo("alfiere",0,"bianco",6,3).
 
 alleato(X,Y):-pezzo(_,_,"bianco",X,Y).
 

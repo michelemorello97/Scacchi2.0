@@ -11,12 +11,15 @@ public class Move {
 	String tipo;
 	
 	@Param(1)
-	String c;
+	int index;
 	
 	@Param(2)
-	int x;
+	String c;
 	
 	@Param(3)
+	int x;
+	
+	@Param(4)
 	int y;
 	
 	public Move() { 
@@ -57,6 +60,14 @@ public class Move {
 	
 	@Override
 	public String toString() {
-		return "Move [tipo=" + tipo + ", c=" + c + ", x=" + x + ", y=" + y + "]";
+		return "Move [tipo=" + tipo +", index= "+ index+ ", c=" + c + ", x=" + x + ", y=" + y + "]";
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 }

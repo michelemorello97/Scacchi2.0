@@ -79,19 +79,19 @@ public class ChessPanel extends JPanel{
 					else
 						g.drawImage(re_nero, j*div+21, i*div+4, null);
 				}
-				else if(gm.getPezzo(i, j).getTipo().contains("tor")) {
+				else if(gm.getPezzo(i, j).getTipo()=="torre") {
 					if(gm.getPezzo(i, j).getC()=="bianco")
 						g.drawImage(torre_bianca, j*div+21, i*div+7, null);
 					else
 						g.drawImage(torre_nera, j*div+21, i*div+7, null);
 				}
-				else if(gm.getPezzo(i, j).getTipo().contains("cav")) {
+				else if(gm.getPezzo(i, j).getTipo()=="cavallo") {
 					if(gm.getPezzo(i, j).getC()=="bianco")
 						g.drawImage(cavallo_bianco, j*div+18, i*div+5, null);
 					else
 						g.drawImage(cavallo_nero, j*div+18, i*div+5, null);
 				}
-				else if(gm.getPezzo(i, j).getTipo().contains("alf")) {
+				else if(gm.getPezzo(i, j).getTipo()=="alfiere") {
 					if(gm.getPezzo(i, j).getC()=="bianco")
 						g.drawImage(alfiere_bianco, j*div+21, i*div+4, null);
 					else
