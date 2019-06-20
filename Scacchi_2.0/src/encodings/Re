@@ -1,26 +1,26 @@
 
-%focus("re","bianco",4,4).
+%focus("re",0,"bianco",4,4).
 %pezzo("torre",0,"nero",0,4).
 %pezzo("torre",1,"nero",4,0).
-%pezzo("cavallo","nero",3,1).
-%pezzo("alfiere","nero",2,2).
-%pezzo("reggina","nero",1,6).
-%pezzo("pedone","nero",3,2).
-%pezzo("re","nero",6,4).
+%pezzo("cavallo",0,"nero",3,1).
+%pezzo("alfiere",0,"nero",2,2).
+%pezzo("regina",0,"nero",1,6).
+%pezzo("pedone",4,"nero",3,2).
+%pezzo("regina",0,"bianco",2,4).
 
 %CALCOLO DEI POSSIBILI OSTACOLI
 alleato(X,Y):-pezzo(_,_,"bianco",X,Y).
 nemico(X,Y):-pezzo(_,_,"nero",X,Y).
 
 %CALCOLO DEI MOVIMENTI
-move(P,I,C,X,Y):-focus(P,I,C,A,B),not alleato(X,Y), not pericolo(X,Y), X=A-1, Y=B-1.
-move(P,I,C,X,Y):-focus(P,I,C,A,B),not alleato(X,Y), not pericolo(X,Y), X=A-1, Y=B.
-move(P,I,C,X,Y):-focus(P,I,C,A,B),not alleato(X,Y), not pericolo(X,Y), X=A-1, Y=B+1.
-move(P,I,C,X,Y):-focus(P,I,C,A,B),not alleato(X,Y), not pericolo(X,Y), X=A, Y=B-1.
-move(P,I,C,X,Y):-focus(P,I,C,A,B),not alleato(X,Y), not pericolo(X,Y), X=A, Y=B+1.
-move(P,I,C,X,Y):-focus(P,I,C,A,B),not alleato(X,Y), not pericolo(X,Y), X=A+1, Y=B-1.
-move(P,I,C,X,Y):-focus(P,I,C,A,B),not alleato(X,Y), not pericolo(X,Y), X=A+1, Y=B.
-move(P,I,C,X,Y):-focus(P,I,C,A,B),not alleato(X,Y), not pericolo(X,Y), X=A+1, Y=B+1.
+move(P,I,C,X,Y):- focus(P,I,C,A,B), not alleato(X,Y), not pericolo(X,Y), X=A-1, Y=B-1.
+move(P,I,C,X,Y):- focus(P,I,C,A,B), not alleato(X,Y), not pericolo(X,Y), X=A-1, Y=B.
+move(P,I,C,X,Y):- focus(P,I,C,A,B), not alleato(X,Y), not pericolo(X,Y), X=A-1, Y=B+1.
+move(P,I,C,X,Y):- focus(P,I,C,A,B), not alleato(X,Y), not pericolo(X,Y), X=A, Y=B-1.
+move(P,I,C,X,Y):- focus(P,I,C,A,B), not alleato(X,Y), not pericolo(X,Y), X=A, Y=B+1.
+move(P,I,C,X,Y):- focus(P,I,C,A,B), not alleato(X,Y), not pericolo(X,Y), X=A+1, Y=B-1.
+move(P,I,C,X,Y):- focus(P,I,C,A,B), not alleato(X,Y), not pericolo(X,Y), X=A+1, Y=B.
+move(P,I,C,X,Y):- focus(P,I,C,A,B), not alleato(X,Y), not pericolo(X,Y), X=A+1, Y=B+1.
 
 %CALCOLO DELLE CELLE PERICOLOSE DELLA torre
 moveE(X,Y):-nearVtorre(X,Y).
@@ -63,31 +63,31 @@ diagonalealfiereS(X,Y):-pezzo("alfiere",_,"nero",X,Y).
 diagonalealfiereS(X,Y):-diagonalealfiereS(A,B), not nemico(X,Y), not alleato(A,B), X=A+1, Y=B-1, X<8, Y>=0.
 diagonalealfiereS(X,Y):-diagonalealfiereS(A,B), not nemico(X,Y), not alleato(A,B), X=A-1, Y=B+1, Y<8, X>=0.
 
-%CALCOLO DELLE MOSSE DELLA reggina
-moveE(X,Y):-pezzo("reggina",_,"nero",A,B), nearregginaO(X,Y), A!=X.
-moveE(X,Y):-pezzo("reggina",_,"nero",A,B), nearregginaV(X,Y), B!=Y.
-moveE(X,Y):-pezzo("reggina",_,"nero",A,B), diagonaleregginaP(X,Y), A!=X, B!=Y.
-moveE(X,Y):-pezzo("reggina",_,"nero",A,B), diagonaleregginaS(X,Y), A!=X, B!=Y.
+%CALCOLO DELLE MOSSE DELLA regina
+moveE(X,Y):-pezzo("rggina",_,"nero",A,B), nearreginaO(X,Y), A!=X.
+moveE(X,Y):-pezzo("regina",_,"nero",A,B), nearreginaV(X,Y), B!=Y.
+moveE(X,Y):-pezzo("reggina",_,"nero",A,B), diagonalereginaP(X,Y), A!=X, B!=Y.
+moveE(X,Y):-pezzo("regina",_,"nero",A,B), diagonalereginaS(X,Y), A!=X, B!=Y.
 
 %NEAR ORIZZONTALI
-nearregginaO(X,Y):-pezzo("reggina",_,"nero",X,Y).
-nearregginaO(X,Y):-nearregginaO(A,Y), not nemico(X,Y), not alleato(A,Y), X=A+1, X<8.
-nearregginaO(X,Y):-nearregginaO(A,Y), not nemico(X,Y), not alleato(A,Y), X=A-1, X>=0.
+nearreginaO(X,Y):-pezzo("regina",_,"nero",X,Y).
+nearreginaO(X,Y):-nearreginaO(A,Y), not nemico(X,Y), not alleato(A,Y), X=A+1, X<8.
+nearreginaO(X,Y):-nearregginaO(A,Y), not nemico(X,Y), not alleato(A,Y), X=A-1, X>=0.
 
 %NEAR VERTICALI
-nearregginaV(X,Y):-pezzo("reggina",_,"nero",X,Y).
-nearregginaV(X,Y):-nearregginaV(X,B), not nemico(X,Y), not alleato(X,B), Y=B+1, Y<8.
-nearregginaV(X,Y):-nearregginaV(X,B), not nemico(X,Y), not alleato(X,B), Y=B-1, Y>=0.
+nearreginaV(X,Y):-pezzo("regina",_,"nero",X,Y).
+nearreginaV(X,Y):-nearreginaV(X,B), not nemico(X,Y), not alleato(X,B), Y=B+1, Y<8.
+nearreginaV(X,Y):-nearreginaV(X,B), not nemico(X,Y), not alleato(X,B), Y=B-1, Y>=0.
 
 %DIAGONALE PRINCIPALE
-diagonaleregginaP(X,Y):-pezzo("reggina",_,"nero",X,Y).
-diagonaleregginaP(X,Y):-diagonaleregginaP(A,B), not nemico(X,Y), not alleato(A,B), X=A+1, Y=B+1, X<8, Y<8.
-diagonaleregginaP(X,Y):-diagonaleregginaP(A,B), not nemico(X,Y), not alleato(A,B), X=A-1, Y=B-1, X>=0, Y>=0.
+diagonalereginaP(X,Y):-pezzo("regina",_,"nero",X,Y).
+diagonalereginaP(X,Y):-diagonalereginaP(A,B), not nemico(X,Y), not alleato(A,B), X=A+1, Y=B+1, X<8, Y<8.
+diagonalereginaP(X,Y):-diagonalereginaP(A,B), not nemico(X,Y), not alleato(A,B), X=A-1, Y=B-1, X>=0, Y>=0.
 
 %DIAGONALE SECONDARIA
-diagonaleregginaS(X,Y):-pezzo("reggina",_,"nero",X,Y).
-diagonaleregginaS(X,Y):-diagonaleregginaS(A,B), not nemico(X,Y), not alleato(A,B), X=A-1, Y=B+1, X>=0, Y<8.
-diagonaleregginaS(X,Y):-diagonaleregginaS(A,B), not nemico(X,Y), not alleato(A,B), X=A+1, Y=B-1, Y>=0, X<8.
+diagonalereginaS(X,Y):-pezzo("regina",_,"nero",X,Y).
+diagonalereginaS(X,Y):-diagonalereginaS(A,B), not nemico(X,Y), not alleato(A,B), X=A-1, Y=B+1, X>=0, Y<8.
+diagonalereginaS(X,Y):-diagonalereginaS(A,B), not nemico(X,Y), not alleato(A,B), X=A+1, Y=B-1, Y>=0, X<8.
 
 %CALCOLO DELLE MOSSE DEI PEDONI
 moveE(X,Y):-pezzo("pedone",_,"nero",A,B), Y=B+1, X=A+1.
