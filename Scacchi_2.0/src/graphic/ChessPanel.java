@@ -67,37 +67,37 @@ public class ChessPanel extends JPanel{
 					g.drawImage(marrone, j*div, i*div, div, div, null);
 				
 				if(gm.getPezzo(i, j)!=null) {
-				if(gm.getPezzo(i, j).getTipo()=="regina") {
-					if(gm.getPezzo(i, j).getC()=="bianco")
+				if(gm.getPezzo(i, j).getTipo().equals("regina")) {
+					if(gm.getPezzo(i, j).getC().equals("bianco"))
 						g.drawImage(regina_bianca, j*div+21, i*div+7, null);
 					else
 						g.drawImage(regina_nera, j*div+21, i*div+7, null);
 				}
-				else if(gm.getPezzo(i, j).getTipo()=="re") {
-					if(gm.getPezzo(i, j).getC()=="bianco")
+				else if(gm.getPezzo(i, j).getTipo().equals("re")) {
+					if(gm.getPezzo(i, j).getC().equals("bianco"))
 						g.drawImage(re_bianco, j*div+21, i*div+4, null);
 					else
 						g.drawImage(re_nero, j*div+21, i*div+4, null);
 				}
-				else if(gm.getPezzo(i, j).getTipo()=="torre") {
-					if(gm.getPezzo(i, j).getC()=="bianco")
+				else if(gm.getPezzo(i, j).getTipo().equals("torre")) {
+					if(gm.getPezzo(i, j).getC().equals("bianco"))
 						g.drawImage(torre_bianca, j*div+21, i*div+7, null);
 					else
 						g.drawImage(torre_nera, j*div+21, i*div+7, null);
 				}
-				else if(gm.getPezzo(i, j).getTipo()=="cavallo") {
-					if(gm.getPezzo(i, j).getC()=="bianco")
+				else if(gm.getPezzo(i, j).getTipo().equals("cavallo")) {
+					if(gm.getPezzo(i, j).getC().equals("bianco"))
 						g.drawImage(cavallo_bianco, j*div+18, i*div+5, null);
 					else
 						g.drawImage(cavallo_nero, j*div+18, i*div+5, null);
 				}
-				else if(gm.getPezzo(i, j).getTipo()=="alfiere") {
-					if(gm.getPezzo(i, j).getC()=="bianco")
+				else if(gm.getPezzo(i, j).getTipo().equals("alfiere")) {
+					if(gm.getPezzo(i, j).getC().equals("bianco"))
 						g.drawImage(alfiere_bianco, j*div+21, i*div+4, null);
 					else
 						g.drawImage(alfiere_nero, j*div+21, i*div+4, null);
 				}
-				else if(gm.getPezzo(i, j).getC()=="bianco")
+				else if(gm.getPezzo(i, j).getC().equals("bianco"))
 						g.drawImage(pedone_bianco, j*div+23, i*div+14, null);
 				else
 						g.drawImage(pedone_nero, j*div+23, i*div+14, null);

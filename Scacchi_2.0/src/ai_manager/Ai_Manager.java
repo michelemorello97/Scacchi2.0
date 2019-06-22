@@ -79,11 +79,9 @@ public class Ai_Manager {
 			for(Object obj: a.getAtoms())
 				if(obj instanceof Move) {
 					m.add((Move) obj);
-					
 				}
 			
 		}
-		
 		
 		
 		
@@ -108,7 +106,6 @@ public class Ai_Manager {
 			for(Object obj: a.getAtoms())
 				if(obj instanceof AiMove) {
 					m=((AiMove) obj);
-					
 				}
 			
 		}
@@ -118,6 +115,7 @@ public class Ai_Manager {
 		
 		handler.removeProgram(facts);
 		handler.removeProgram(program);
+
 		program.clearFilesPaths();
 		facts.clearAll();
 		

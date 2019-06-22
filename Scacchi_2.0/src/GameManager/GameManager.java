@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 import ai_manager.Ai_Manager;
 import graphic.ChessPanel;
+import model.AiMove;
 import model.Move;
 import model.Pezzo;
 
@@ -85,8 +86,9 @@ public class GameManager implements MouseListener{
 
 		}		
 		
-		else if(focus!=null)
+		else if(focus!=null) 
 			checkAndMove(x, y);
+		
 			
 			
 		
@@ -255,6 +257,8 @@ public class GameManager implements MouseListener{
 					scacchiera[y][x].setIndex(scacchiera[y][x].getIndex()+1);
 				}
 				panel.repaint();
+				
+				cambiaTurno();
 			}
 		}
 	}
@@ -268,6 +272,44 @@ public class GameManager implements MouseListener{
 		}
 	}
 	
+	public void caricaALL() {
+		for(int i=0; i<8; i++) {
+			for(int j=0; j<8; j++) {
+				if(scacchiera[i][j]!=null)
+					ai.newFacts(scacchiera[i][j]);
+			}
+		}
+	}
+	public void cambiaTurno() {
+		caricaALL();
+		AiMove m=null;
+		ai.load("/home/michele/git/Scacchi2.0/Scacchi_2.0/src/encodings/AiEnEmY");
+		try {
+			mossePossibili.clear();
+			//trovaMossa(ai.startAI());
+			trovaMossa(ai.startAI());
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException | InstantiationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		panel.repaint();
+	}
 	
+	public void trovaMossa(AiMove m) {
+		String tipo=m.getTipo().substring(1, m.getTipo().length()-1);
+		String colore= m.getC().substring(1, m.getC().length()-1);
+		//scacchiera[m.getY()][m.getX()]=new Pezzo(tipo, m.getIndex(), colore, m.getX(), m.getY());
+		
+		for(int i=0; i<8; i++)
+			for(int j=0; j<8; j++) {
+				if(scacchiera[i][j]!=null && scacchiera[i][j].getTipo().equals(tipo) && scacchiera[i][j].getC().equals(colore) && scacchiera[i][j].getIndex()==m.getIndex()) {
+					scacchiera[i][j]=null;
+					scacchiera[m.getY()][m.getX()]=new Pezzo(tipo, m.getIndex(), colore, m.getX(), m.getY());
+					break;
+				}
+			}
+	}
 	
 }
