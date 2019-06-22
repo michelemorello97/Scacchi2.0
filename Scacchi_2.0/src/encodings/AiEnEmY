@@ -46,23 +46,10 @@
 
 
 
-
-
-
 %provola
-%pezzo("torre",0,"nero",3,3).
-%pezzo("pedone",0,"bianco",3,1).
-%pezzo("pedone",1,"bianco",2,3).
-%pezzo("pedone",2,"bianco",3,7).
-%pezzo("pedone",3,"bianco",6,3).
-%pezzo("pedone",1,"nero",3,6).
-%fatto
-
-
-
-
-
-
+%pezzo("pedone",0,"nero",3,1).
+%pezzo("pedone",1,"bianco",2,2).
+%pezzo("pedone",0,"bianco",4,2).
 
 
 
@@ -70,7 +57,12 @@
 
 focus(N,I,"nero",X,Y)|out(N,I,"nero",X,Y):-pezzo(N,I,"nero",X,Y).
 :-#count{N,I: focus(N,I,_,_,_)}!=1.
-:-focus(N,I,"nero",_,_), #count{X,Y:move(N,I,"nero",X,Y)}<2.
+:-focus(N,I,"nero",_,_), #count{X,Y:move(N,I,"nero",X,Y)}<1.
+
+
+aiMove(P,I,C,X,Y)|out(P,I,C,X,Y):-move(P,I,C,X,Y).
+:-#count{N,I: aiMove(N,I,_,_,_)}!=1.
+%:~out(P,I,C,X,Y). [1@1,P,I,C,X,Y]
 
 %CALCOLO DEI POSSIBILI OSTACOLI
 alleato(X,Y):-pezzo(_,_,"nero",X,Y).
@@ -80,7 +72,7 @@ occupata(X,Y):-pezzo(_,_,_,X,Y).
 
 
 %CALCOLO DELLE MOSSE DEI PEDONI
-move("pedone",I,"nero",X,Y):-focus("pedone",I,"nero",X,Y).
+%move("pedone",I,"nero",X,Y):-focus("pedone",I,"nero",X,Y).
 move("pedone",I,"nero",X,Y):-focus("pedone",I,"nero",A,B), Y=B+1, X=A+1, Y<8, X<8, nemico(X,Y).
 move("pedone",I,"nero",X,Y):-focus("pedone",I,"nero",A,B), Y=B+1, X=A-1, Y<8, X>=0, nemico(X,Y).
 move("pedone",I,"nero",X,Y):-focus("pedone",I,"nero",A,B), Y=B+1, not occupata(X,Y), X=A.
@@ -105,7 +97,7 @@ nearV(X,Y):-nearV(X,A),Y=A-1, not nemico(X,A) , not alleato(X,Y), Y>=0.
 
 %CALCOLO DEI MOVE DEL CAVALLO
 move("cavallo",I,"nero",X,Y):-near(X,Y),focus("cavallo",I,"nero",_,_).
-move("cavallo",I,"nero",X,Y):-focus("cavallo",I,"nero",X,Y).
+%move("cavallo",I,"nero",X,Y):-focus("cavallo",I,"nero",X,Y).
 %CALCOLO DEI NEAR DEL CAVALLO
 near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A-1,Y=B-2.
 near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A+1,Y=B-2.
@@ -117,8 +109,40 @@ near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A+2,Y=B-1.
 near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A+2,Y=B+1.
 
 
+%CALCOLO DEI MOVE DELL'ALFIERE
+move("alfiere",I,"nero",X,Y):-focus("alfiere",I,"nero",A,B), diagonaleP(X,Y), A!=X, B!=Y.
+move("alfiere",I,"nero",X,Y):-focus("alfiere",I,"nero",A,B), diagonaleS(X,Y), A!=X, B!=Y.
+%CALCOLO DELLA DIAGONALE PRINCIPAE
+diagonaleP(X,Y):-focus(P,I,C,X,Y).
+diagonaleP(X,Y):-diagonaleP(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B+1, X<8, Y<8.
+diagonaleP(X,Y):-diagonaleP(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B-1, X>=0, Y>=0.
+%CALCOLO DELL DIAGONALE SECONDARIA
+diagonaleS(X,Y):-focus(P,I,C,X,Y).
+diagonaleS(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B-1, X<8, Y>=0.
+diagonaleS(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B+1, Y<8, X>=0.
 
 
+%CALCOLO DEI MOVIMENTI DELLA REGINA
+move("regina",I,"nero",X,Y):-focus("regina",I,"nero",A,B), nearO(X,Y), A!=X.
+move("regina",I,"nero",X,Y):-focus("regina",I,"nero",A,B), nearV(X,Y), B!=Y.
+move("regina",I,"nero",X,Y):-focus("regina",I,"nero",A,B), diagonaleP(X,Y), A!=X, B!=Y.
+move("regina",I,"nero",X,Y):-focus("regina",I,"nero",A,B), diagonaleS(X,Y), A!=X, B!=Y.
+%CALCOLO DEI NEAR DELLA REGINA
+nearO(X,Y):-focus("regina",I,"nero",X,Y).
+nearO(X,Y):-nearO(A,Y), not alleato(X,Y), not nemico(A,Y), X=A+1, X<8.
+nearO(X,Y):-nearO(A,Y), not alleato(X,Y), not nemico(A,Y), X=A-1, X>=0.
+%CALCOLO DEI NEAR DELLA REGINA
+nearV(X,Y):-focus("regina",I,"nero",X,Y).
+nearV(X,Y):-nearV(X,B), not alleato(X,Y), not nemico(X,B), Y=B+1, Y<8.
+nearV(X,Y):-nearV(X,B), not alleato(X,Y), not nemico(X,B), Y=B-1, Y>=0.
+%CALCOLO DELLA DIAGONALE P DELLA REGINA
+diagonaleP(X,Y):-focus("regina",I,"nero",X,Y).
+diagonaleP(X,Y):-diagonaleP(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B+1, X<8, Y<8.
+diagonaleP(X,Y):-diagonaleP(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B-1, X>=0, Y>=0.
+%CALCOLO DELLA DIAGONALE S DELLA REGINA
+diagonaleS(X,Y):-focus("regina",I,"nero",X,Y).
+diagonaleS(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B-1, X<8, Y>=0.
+diagonaleS(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B+1, Y<8, X>=0.
 
 
 
