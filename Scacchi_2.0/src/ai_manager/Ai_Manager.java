@@ -12,6 +12,7 @@ import it.unical.mat.embasp.languages.asp.AnswerSet;
 import it.unical.mat.embasp.languages.asp.AnswerSets;
 import it.unical.mat.embasp.platforms.desktop.DesktopHandler;
 import it.unical.mat.embasp.specializations.dlv2.desktop.DLV2DesktopService;
+import model.AiMove;
 import model.Focus;
 import model.Move;
 import model.Pezzo;
@@ -34,6 +35,7 @@ public class Ai_Manager {
 			ASPMapper.getInstance().registerClass(Pezzo.class);
 			ASPMapper.getInstance().registerClass(Move.class);
 			ASPMapper.getInstance().registerClass(Focus.class);
+			ASPMapper.getInstance().registerClass(AiMove.class);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -94,6 +96,33 @@ public class Ai_Manager {
 		return m;
 	}
 	
-	
+	public AiMove startAI() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, InstantiationException {
+		AiMove m=new AiMove();
+		handler.addProgram(facts);
+		//Move m=new Move();
+		
+		output = handler.startSync();
+		answers = (AnswerSets) output;
+		
+		for(AnswerSet a: answers.getAnswersets()) {
+			for(Object obj: a.getAtoms())
+				if(obj instanceof AiMove) {
+					m=((AiMove) obj);
+					
+				}
+			
+		}
+		
+		
+		
+		
+		handler.removeProgram(facts);
+		handler.removeProgram(program);
+		program.clearFilesPaths();
+		facts.clearAll();
+		
+		
+		return m;
+	}
 }
 
