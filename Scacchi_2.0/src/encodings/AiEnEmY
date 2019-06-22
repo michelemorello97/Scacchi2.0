@@ -16,6 +16,7 @@
 %pezzo("pedone",6,"bianco",6,6).
 %pezzo("pedone",7,"bianco",7,6).
 
+%
 %pezzo("torre",0,"nero",0,0).
 %pezzo("torre",1,"nero",7,0).%
 
