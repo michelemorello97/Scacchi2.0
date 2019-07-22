@@ -48,22 +48,21 @@
 
 
 %provola
-%pezzo("pedone",0,"nero",3,1).
-%pezzo("pedone",1,"bianco",2,2).
-%pezzo("pedone",0,"bianco",4,2).
-
-
+%pezzo("torre",1,"nero",4,3).
+%pezzo("torre",0,"nero",1,6).
+%pezzo("pedone",1,"bianco",4,1).
+%pezzo("cavallo",0,"bianco",4,6).
+%pezzo("regina",0,"bianco",2,3).
 
 
 
 focus(N,I,"nero",X,Y)|out(N,I,"nero",X,Y):-pezzo(N,I,"nero",X,Y).
-:-#count{N,I: focus(N,I,_,_,_)}!=1.
-:-focus(N,I,"nero",_,_), #count{X,Y:move(N,I,"nero",X,Y)}<1.
+:~#count{N,I: focus(N,I,_,_,_)}!=1. [1@100]
+:~focus(N,I,"nero",_,_), #count{X,Y:move(N,I,"nero",X,Y)}<1. [1@100]
 
 
-aiMove(P,I,C,X,Y)|out(P,I,C,X,Y):-move(P,I,C,X,Y).
-:-#count{N,I: aiMove(N,I,_,_,_)}!=1.
-%:~out(P,I,C,X,Y). [1@1,P,I,C,X,Y]
+aiMove(P,I,C,X,Y)|noMove(P,I,C,X,Y):-move(P,I,C,X,Y).
+:~#count{P,I: aiMove(P,I,C,X,Y)}!=1.  [1@100]
 
 %CALCOLO DEI POSSIBILI OSTACOLI
 alleato(X,Y):-pezzo(_,_,"nero",X,Y).
@@ -98,7 +97,7 @@ nearV(X,Y):-nearV(X,A),Y=A-1, not nemico(X,A) , not alleato(X,Y), Y>=0.
 
 %CALCOLO DEI MOVE DEL CAVALLO
 move("cavallo",I,"nero",X,Y):-near(X,Y),focus("cavallo",I,"nero",_,_).
-%move("cavallo",I,"nero",X,Y):-focus("cavallo",I,"nero",X,Y).
+
 %CALCOLO DEI NEAR DEL CAVALLO
 near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A-1,Y=B-2, X>=0, Y>=0.
 near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A+1,Y=B-2, X<8, Y>=0.
@@ -114,11 +113,11 @@ near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A+2,Y=B+1, X<8, Y<
 move("alfiere",I,"nero",X,Y):-focus("alfiere",I,"nero",A,B), diagonaleP(X,Y), A!=X, B!=Y.
 move("alfiere",I,"nero",X,Y):-focus("alfiere",I,"nero",A,B), diagonaleS(X,Y), A!=X, B!=Y.
 %CALCOLO DELLA DIAGONALE PRINCIPAE
-diagonaleP(X,Y):-focus(P,I,C,X,Y).
+diagonaleP(X,Y):-focus("alfiere",I,C,X,Y).
 diagonaleP(X,Y):-diagonaleP(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B+1, X<8, Y<8.
 diagonaleP(X,Y):-diagonaleP(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B-1, X>=0, Y>=0.
 %CALCOLO DELL DIAGONALE SECONDARIA
-diagonaleS(X,Y):-focus(P,I,C,X,Y).
+diagonaleS(X,Y):-focus("alfiere",I,C,X,Y).
 diagonaleS(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B-1, X<8, Y>=0.
 diagonaleS(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B+1, Y<8, X>=0.
 
@@ -145,6 +144,29 @@ diagonaleS(X,Y):-focus("regina",I,"nero",X,Y).
 diagonaleS(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B-1, X<8, Y>=0.
 diagonaleS(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B+1, Y<8, X>=0.
 
+%IL MANGIO DEL PEZZO AL PEZZO
+canEat(P,I,"bianco",X,Y):-move(F, K,"nero",X,Y), pezzo(P,I,"bianco",X,Y).
+canEat(P,I,"bianco",X,Y):-move(F, K,"nero",X,Y), pezzo(P,I,"bianco",X,Y).
+
+%WEAK CHE NON MANGIO
+:~ #count{P,I,X,Y:canEat(P,I,C,X,Y)}=0. [1@6]
+
+%WEAK DEL PEZZO CHE PREFERISCE MANGIARE ROBA FORTE
+:~ aiMove(P,I,"nero",X,Y), not nemico(X,Y). [1@6,X,Y]
+:~ aiMove(P,I,"nero",X,Y), canEat("pedone",J,"bianco",X,Y). [1@5,X,Y]
+:~ aiMove(P,I,"nero",X,Y), canEat("torre",J,"bianco",X,Y). [1@4,X,Y]
+:~ aiMove(P,I,"nero",X,Y), canEat("alfiere",J,"bianco",X,Y). [1@4,X,Y]
+:~ aiMove(P,I,"nero",X,Y), canEat("cavallo",J,"bianco",X,Y). [1@3,X,Y]
+:~ aiMove(P,I,"nero",X,Y), canEat("regina",J,"bianco",X,Y). [1@2,X,Y]
+
+
+%:~ aiMove(P,I,"nero",X,Y) and scacco [1@1,X,Y]
+
+%:~ noMove(P,I,"nero",X,Y), canEat("pedone",J,"bianco",X,Y). [1@1,X,Y]
+%:~ noMove(P,I,"nero",X,Y), canEat("torre",J,"bianco",X,Y). [2@1,X,Y]
+%:~ noMove(P,I,"nero",X,Y), canEat("alfiere",J,"bianco",X,Y). [2@1,X,Y]
+%:~ noMove(P,I,"nero",X,Y), canEat("cavallo",J,"bianco",X,Y). [3@1,X,Y]
+%:~ noMove(P,I,"nero",X,Y), canEat("regina",J,"bianco",X,Y). [4@1,X,Y]
 
 
 
