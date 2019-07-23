@@ -7,9 +7,7 @@
 
 
 %FATTI (DA AGGIUSTARE IL FATTO D'IDENTITA')
-pezzo("alfiere",0,"nero",3,1).
-focus("pedone",0,"bianco",2,2).
-pezzo("re",0,"bianco",1,3).
+
 
 %MI CONTROLLO QUALE CELLA E' OCCUPATA
 occupata(X,Y):-pezzo(_,_,_,X,Y).

@@ -2,10 +2,7 @@
 %pezzo(nomePezzo,colorePezzo,coordinataX,coordinataY).
 
 %FATTI
-%focus("torre",0,"bianco",2,2).
-%pezzo("re",0,"bianco",4,4).
-%pezzo("alfiere",1,"nero",1,1).
-%pezzo("torre",1,"nero",4,2).
+
 
 
 %MI CONTROLLO QUALE CELLA E' OCCUPATA
