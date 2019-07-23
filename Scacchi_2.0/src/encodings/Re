@@ -1,12 +1,4 @@
 
-%focus("re",0,"bianco",4,4).
-%pezzo("torre",0,"nero",0,4).
-%pezzo("torre",1,"nero",4,0).
-%pezzo("cavallo",0,"nero",3,1).
-%pezzo("alfiere",0,"nero",2,2).
-%pezzo("regina",0,"nero",1,6).
-%pezzo("pedone",4,"nero",3,2).
-%pezzo("regina",0,"bianco",2,4).
 
 %CALCOLO DEI POSSIBILI OSTACOLI
 alleato(X,Y):-pezzo(_,_,"bianco",X,Y).
@@ -33,8 +25,8 @@ moveE(X,Y):-pezzo("pedone",_,"nero",A,B), Y=B+1, X=A-1.
 
 
 %CALCOLO DELLE CELLE PERICOLOSE DELLA torre
-moveE(X,Y):-nearVtorre(X,Y).
-moveE(X,Y):-nearOtorre(X,Y).
+moveE(X,Y):-nearVtorre(X,Y), pezzo("torre",_,"nero",A,Y), A!=X.
+moveE(X,Y):-nearOtorre(X,Y), pezzo("torre",_,"nero",X,B), B!=Y.
 
 
 %CALCOLO DEI NEAR Verticale
@@ -65,8 +57,8 @@ nearcavallo(X,Y):-pezzo("cavallo",_,"nero",A,B), not nemico(X,Y), X=A+2, Y=B+1, 
 
 
 %CALCOLO DELLE MOSSE DELL'alfiere
-moveE(X,Y):-pezzo("alfiere",_,"nero",A,B), diagonalealfiereP(X,Y).
-moveE(X,Y):-pezzo("alfiere",_,"nero",A,B), diagonalealfiereS(X,Y).
+moveE(X,Y):-pezzo("alfiere",_,"nero",A,B), diagonalealfiereP(X,Y), A!=X, B!=Y.
+moveE(X,Y):-pezzo("alfiere",_,"nero",A,B), diagonalealfiereS(X,Y), A!=X, B!=Y.
 
 
 %DIAGONALE PRINCIPALE

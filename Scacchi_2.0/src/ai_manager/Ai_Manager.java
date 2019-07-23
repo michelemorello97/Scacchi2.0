@@ -103,13 +103,16 @@ public class Ai_Manager {
 		answers = (AnswerSets) output;
 		
 		for(AnswerSet a: answers.getAnswersets()) {
-			for(Object obj: a.getAtoms())
+			for(Object obj: a.getAtoms()) {
 				if(obj instanceof AiMove) {
 					m=((AiMove) obj);
 				}
+				if(obj instanceof Focus)
+					System.out.println(((Focus) obj).toString());
+			}
 			
 		}
-		
+		System.out.println(m.toString());
 		
 		
 		

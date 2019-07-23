@@ -1,58 +1,5 @@
-%pezzo("pedone",0,"nero",0,1).
-%pezzo("pedone",1,"nero",1,1).
-%pezzo("pedone",2,"nero",2,1).
-%pezzo("pedone",3,"nero",3,1).
-%pezzo("pedone",4,"nero",4,1).
-%pezzo("pedone",5,"nero",5,1).
-%pezzo("pedone",6,"nero",6,1).
-%pezzo("pedone",7,"nero",7,1).
-
-%pezzo("pedone",0,"bianco",0,6).
-%pezzo("pedone",1,"bianco",1,6).
-%pezzo("pedone",2,"bianco",2,6).
-%pezzo("pedone",3,"bianco",3,6).
-%pezzo("pedone",4,"bianco",4,4).
-%pezzo("pedone",5,"bianco",5,6).
-%pezzo("pedone",6,"bianco",6,6).
-%pezzo("pedone",7,"bianco",7,6).
-
-%
-%pezzo("torre",0,"nero",0,0).
-%pezzo("torre",1,"nero",7,0).%
-
-%pezzo("torre",0,"bianco",0,7).
-%pezzo("torre",1,"bianco",7,7).
-
-%pezzo("cavallo",0,"nero",1,0).
-%pezzo("cavallo",1,"nero",6,0).
-
-%pezzo("cavallo",0,"bianco",1,7).
-%pezzo("cavallo",1,"bianco",6,7).
-
-%pezzo("alfiere",0,"nero",2,0).
-%pezzo("alfiere",1,"nero",5,0).
-
-%pezzo("alfiere",0,"bianco",2,7).
-%pezzo("alfiere",1,"bianco",5,7).
-
-%pezzo("regina",0,"bianco",3,7).
-
-%pezzo("regina",0,"nero",3,0).
-
-%pezzo("re",0,"nero",4,0).
-%pezzo("re",0,"bianco",4,7).
-
-
-
-
-
 
 %provola
-pezzo("re",0,"nero",7,0).
-pezzo("regina",0,"nero",4,3).
-pezzo("torre",0,"bianco",0,0).
-pezzo("alfiere",0,"nero",1,1).
-pezzo("regina",0,"bianco",0,2).
 
 
 
@@ -68,8 +15,6 @@ aiMove(P,I,C,X,Y)|noMove(P,I,C,X,Y):-move(P,I,C,X,Y).
 alleato(X,Y):-out(_,_,"nero",X,Y).
 nemico(X,Y):-pezzo(_,_,"bianco",X,Y).
 occupata(X,Y):-pezzo(_,_,_,X,Y).
-
-
 
 %CALCOLO DELLE MOSSE DEI PEDONI
 %move("pedone",I,"nero",X,Y):-focus("pedone",I,"nero",X,Y).
@@ -98,14 +43,14 @@ nearV(X,Y):-nearV(X,A),Y=A-1, not nemico(X,A) , not alleato(X,Y), Y>=0.
 move("cavallo",I,"nero",X,Y):-near(X,Y),focus("cavallo",I,"nero",_,_).
 
 %CALCOLO DEI NEAR DEL CAVALLO
-near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A-1,Y=B-2.
-near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A+1,Y=B-2.
-near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A-1,Y=B+2.
-near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A+1,Y=B+2.
-near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A-2,Y=B-1.
-near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A-2,Y=B+1.
-near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A+2,Y=B-1.
-near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A+2,Y=B+1.
+near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A-1,Y=B-2, X>=0, Y>=0.
+near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A+1,Y=B-2, X<8, Y>=0.
+near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A-1,Y=B+2, X>=0, Y<8.
+near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A+1,Y=B+2, X<8, Y<8.
+near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A-2,Y=B-1, X>=0, Y>=0.
+near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A-2,Y=B+1, X>=0, Y<8.
+near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A+2,Y=B-1, X<8, Y>=0.
+near(X,Y):-focus("cavallo",I,"nero",A,B), not alleato(X,Y), X=A+2,Y=B+1, X<8, Y<8.
 
 
 %CALCOLO DEI MOVE DELL'ALFIERE
@@ -143,12 +88,35 @@ diagonaleS(X,Y):-focus("regina",I,"nero",X,Y).
 diagonaleS(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B-1, X<8, Y>=0.
 diagonaleS(X,Y):-diagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B+1, Y<8, X>=0.
 
+%MOVIMENTO RE (VIP)
+move("re",I,"nero",X,Y):- focus("re",I,"nero",A,B), not alleato(X,Y), not danger(X,Y), X=A-1, Y=B-1, X>=0, Y>=0.
+move("re",I,"nero",X,Y):- focus("re",I,"nero",A,B), not alleato(X,Y), not danger(X,Y), X=A-1, Y=B, X>=0.
+move("re",I,"nero",X,Y):- focus("re",I,"nero",A,B), not alleato(X,Y), not danger(X,Y), X=A-1, Y=B+1, X>=0, Y<8.
+move("re",I,"nero",X,Y):- focus("re",I,"nero",A,B), not alleato(X,Y), not danger(X,Y), X=A, Y=B-1, Y>=0.
+move("re",I,"nero",X,Y):- focus("re",I,"nero",A,B), not alleato(X,Y), not danger(X,Y), X=A, Y=B+1, Y<8.
+move("re",I,"nero",X,Y):- focus("re",I,"nero",A,B), not alleato(X,Y), not danger(X,Y), X=A+1, Y=B-1, X<8, Y>=0.
+move("re",I,"nero",X,Y):- focus("re",I,"nero",A,B), not alleato(X,Y), not danger(X,Y), X=A+1, Y=B, X<8.
+move("re",I,"nero",X,Y):- focus("re",I,"nero",A,B), not alleato(X,Y), not danger(X,Y), X=A+1, Y=B+1, X<8, Y<8.
+
+danger(X,Y):-moveE(P,I,C,X,Y).
+
+
+
+
+
+
+
+
+
+
+
+
 %IL MANGIO DEL PEZZO AL PEZZO
 canEat(P,I,"bianco",X,Y):-move(F, K,"nero",X,Y), pezzo(P,I,"bianco",X,Y).
 canEat(P,I,"bianco",X,Y):-move(F, K,"nero",X,Y), pezzo(P,I,"bianco",X,Y).
 
 %WEAK CHE NON MANGIO
-:~ #count{P,I,X,Y:canEat(P,I,C,X,Y)}=0. [2@6]
+:~ #count{P,I,X,Y:canEat(P,I,C,X,Y)}=0. [2@6, 1]
 
 %WEAK DEL PEZZO CHE PREFERISCE MANGIARE ROBA FORTE
 :~ aiMove(P,I,"nero",X,Y), not nemico(X,Y). [1@6,X,Y]
@@ -157,7 +125,10 @@ canEat(P,I,"bianco",X,Y):-move(F, K,"nero",X,Y), pezzo(P,I,"bianco",X,Y).
 :~ aiMove(P,I,"nero",X,Y), canEat("alfiere",J,"bianco",X,Y). [1@4,X,Y]
 :~ aiMove(P,I,"nero",X,Y), canEat("cavallo",J,"bianco",X,Y). [1@3,X,Y]
 :~ aiMove(P,I,"nero",X,Y), canEat("regina",J,"bianco",X,Y). [1@2,X,Y]
-%:~ aiMove(P,I,"nero",X,Y) and scacco [1@1,X,Y]
+:~ pezzo("re",J,"bianco",A,B),not scaccoReBianco(A,B). [1@6, 2] 
+
+
+
 
 
 
@@ -167,7 +138,7 @@ cellaDifesa(X,Y):-aiMove(_,_,_,X,Y), path(X,Y,_).
 
 %:~scaccoRe(_,I,"bianco",_,_), path(A,B,_), noMove(_,_,_,A,B), not pericolo(T,K), focus(_,_,_,T,K). [1@7,A,B]
 
-:~scaccoRe(_,I,"bianco",_,_), aiMove(_,_,_,X,Y), not cellaDifesa(X,Y). [1@7,X,Y]
+:~scaccoRe(_,I,"bianco",_,_),focus(P,_,_,_,_), aiMove(_,_,_,X,Y), not cellaDifesa(X,Y), P!="re". [1@7,X,Y]
 
 path(X,Y,8):-scaccoRe("cavallo",I,"bianco",X,Y).
 path(X,Y,8):-scaccoRe("pedone",I,"bianco",X,Y).
@@ -204,6 +175,19 @@ scaccoRe(P,I,"bianco",X,Y):- path(X,Y,0), pezzo(P, I, "bianco", X,Y).
 scaccoRe(P,I,"bianco",X,Y):- path(X,Y,4), pezzo(P, I, "bianco", X,Y).
 scaccoRe(P,I,"bianco",X,Y):- path(X,Y,2), pezzo(P, I, "bianco", X,Y).
 scaccoRe(P,I,"bianco",X,Y):- path(X,Y,6), pezzo(P, I, "bianco", X,Y).
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 %CALCOLO PERICOLO RE NERO
 
@@ -283,6 +267,17 @@ pericolo(X,Y):- path(X,Y,0), focus(_, _, _, X,Y).
 pericolo(X,Y):- path(X,Y,4), focus(_, _, _, X,Y).
 pericolo(X,Y):- path(X,Y,2), focus(_, _, _, X,Y).
 pericolo(X,Y):- path(X,Y,6), focus(_, _, _, X,Y).
+
+
+
+
+
+
+
+
+
+
+
 
 
 %CALCOLO DELLE CELLE PERICOLOSE DEI PEDONI
@@ -397,6 +392,125 @@ nearVRegina("regina",I,"bianco",X,Y):-nearVRegina("regina",I,"bianco",X,A),Y=A-1
 
 cellaAttaccata(X,Y,1):-nearVRegina("regina",I,"bianco",X,Y), pezzo("re",0,"nero",X,A),A=Y+1, A<8.
 cellaAttaccata(X,Y,5):-nearVRegina("regina",I,"bianco",X,Y), pezzo("re",0,"nero",X,A),A=Y-1, A>=0.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%NEWMOVE E SCACCO AL RE NEMICO (BIANCO)
+%CALCOLO DELLE MOSSE DEI PEDONI
+%move("pedone",I,"nero",X,Y):-focus("pedone",I,"nero",X,Y).
+newMove("pedone",I,"nero",X,Y):-aiMove("pedone",I,"nero",A,B), Y=B+1, X=A+1, Y<8, X<8, nemico(X,Y).
+newMove("pedone",I,"nero",X,Y):-aiMove("pedone",I,"nero",A,B), Y=B+1, X=A-1, Y<8, X>=0, nemico(X,Y).
+
+
+%PER CALCOLARMI I MOIMENTI IN BASE AI NEAR, PRIMA VERTICALE E POI ORIZZONTALE
+newMove("torre",I,"nero",X,Y):-aiMove("torre",I,"nero",X,B), newNearV(X,Y), B!=Y.
+newMove("torre",I,"nero",X,Y):-aiMove("torre",I,"nero",A,Y), newNearO(X,Y), A!=X.
+
+%CALCOLO DEI NEAR ORIZZONTALI
+newNearO(A,Y):-aiMove("torre",I,"nero",X,Y), A=X+1, A<8.
+newNearO(A,Y):-aiMove("torre",I,"nero",X,Y), A=X-1, A>=0.
+newNearO(X,Y):-newNearO(A,Y),X=A+1, not nemico(A,Y), not alleato(X,Y), X<8.
+newNearO(X,Y):-newNearO(A,Y),X=A-1, not nemico(A,Y), not alleato(X,Y) ,X>=0.
+
+%CALCOLO DEI NEAR VERTICALI
+newNearV(X,B):-aiMove("torre",I,"nero",X,Y), B=Y-1, B>=0.
+newNearV(X,B):-aiMove("torre",I,"nero",X,Y), B=Y+1, B<8.
+newNearV(X,Y):-newNearV(X,A),Y=A+1, not nemico(X,A) , not alleato(X,Y), Y<8.
+newNearV(X,Y):-newNearV(X,A),Y=A-1, not nemico(X,A) , not alleato(X,Y), Y>=0.
+
+
+%CALCOLO DEI MOVE DEL CAVALLO
+newMove("cavallo",I,"nero",X,Y):-newNear(X,Y),aiMove("cavallo",I,"nero",_,_).
+
+%CALCOLO DEI NEAR DEL CAVALLO
+newNear(X,Y):-aiMove("cavallo",I,"nero",A,B), not alleato(X,Y), X=A-1,Y=B-2, X>=0, Y>=0.
+newNear(X,Y):-aiMove("cavallo",I,"nero",A,B), not alleato(X,Y), X=A+1,Y=B-2, X<8, Y>=0.
+newNear(X,Y):-aiMove("cavallo",I,"nero",A,B), not alleato(X,Y), X=A-1,Y=B+2, X>=0, Y<8.
+newNear(X,Y):-aiMove("cavallo",I,"nero",A,B), not alleato(X,Y), X=A+1,Y=B+2, X<8, Y<8.
+newNear(X,Y):-aiMove("cavallo",I,"nero",A,B), not alleato(X,Y), X=A-2,Y=B-1, X>=0, Y>=0.
+newNear(X,Y):-aiMove("cavallo",I,"nero",A,B), not alleato(X,Y), X=A-2,Y=B+1, X>=0, Y<8.
+newNear(X,Y):-aiMove("cavallo",I,"nero",A,B), not alleato(X,Y), X=A+2,Y=B-1, X<8, Y>=0.
+newNear(X,Y):-aiMove("cavallo",I,"nero",A,B), not alleato(X,Y), X=A+2,Y=B+1, X<8, Y<8.
+
+
+%CALCOLO DEI MOVE DELL'ALFIERE
+newMove("alfiere",I,"nero",X,Y):-aiMove("alfiere",I,"nero",A,B), newDiagonaleP(X,Y), A!=X, B!=Y.
+newMove("alfiere",I,"nero",X,Y):-aiMove("alfiere",I,"nero",A,B), newDiagonaleS(X,Y), A!=X, B!=Y.
+%CALCOLO DELLA DIAGONALE PRINCIPAE
+newDiagonaleP(A,B):-aiMove("alfiere",I,C,X,Y), A=X-1, B=Y-1, A>=0, B>=0.
+newDiagonaleP(A,B):-aiMove("alfiere",I,C,X,Y), A=X+1, B=Y+1, A<8, B<8.
+newDiagonaleP(X,Y):-newDiagonaleP(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B+1, X<8, Y<8.
+newDiagonaleP(X,Y):-newDiagonaleP(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B-1, X>=0, Y>=0.
+%CALCOLO DELL DIAGONALE SECONDARIA
+newDiagonaleS(A,B):-aiMove("alfiere",I,C,X,Y), A=X+1, B=Y-1, A<8, B>=0.
+newDiagonaleS(A,B):-aiMove("alfiere",I,C,X,Y), A=X-1, B=Y+1, A>=0, B<8.
+newDiagonaleS(X,Y):-newDiagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B-1, X<8, Y>=0.
+newDiagonaleS(X,Y):-newDiagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B+1, Y<8, X>=0.
+
+
+%CALCOLO DEI MOVIMENTI DELLA REGINA
+newMove("regina",I,"nero",X,Y):-aiMove("regina",I,"nero",A,B), newNearO(X,Y), A!=X.
+newMove("regina",I,"nero",X,Y):-aiMove("regina",I,"nero",A,B), newNearV(X,Y), B!=Y.
+newMove("regina",I,"nero",X,Y):-aiMove("regina",I,"nero",A,B), newDiagonaleP(X,Y), A!=X, B!=Y.
+newMove("regina",I,"nero",X,Y):-aiMove("regina",I,"nero",A,B), newDiagonaleS(X,Y), A!=X, B!=Y.
+%CALCOLO DEI NEAR DELLA REGINA
+newNearO(A,Y):-aiMove("regina",I,"nero",X,Y), A=X-1, A>=0.
+newNearO(A,Y):-aiMove("regina",I,"nero",X,Y), A=X+1, A<8.
+newNearO(X,Y):-newNearO(A,Y), not alleato(X,Y), not nemico(A,Y), X=A+1, X<8.
+newNearO(X,Y):-newNearO(A,Y), not alleato(X,Y), not nemico(A,Y), X=A-1, X>=0.
+%CALCOLO DEI NEAR DELLA REGINA
+newNearV(X,B):-aiMove("regina",I,"nero",X,Y), B=Y-1, B>=0.
+newNearV(X,B):-aiMove("regina",I,"nero",X,Y), B=Y+1, B<8.
+newNearV(X,Y):-newNearV(X,B), not alleato(X,Y), not nemico(X,B), Y=B+1, Y<8.
+newNearV(X,Y):-newNearV(X,B), not alleato(X,Y), not nemico(X,B), Y=B-1, Y>=0.
+%CALCOLO DELLA DIAGONALE P DELLA REGINA
+newDiagonaleP(A,B):-aiMove("regina",I,"nero",X,Y), A=X-1, B=Y-1, A>=0, B>=0.
+newDiagonaleP(A,B):-aiMove("regina",I,"nero",X,Y), A=X+1, B=Y+1, A<8, B<8.
+newDiagonaleP(X,Y):-newDiagonaleP(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B+1, X<8, Y<8.
+newDiagonaleP(X,Y):-newDiagonaleP(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B-1, X>=0, Y>=0.
+%CALCOLO DELLA DIAGONALE S DELLA REGINA
+newDiagonaleS(A,B):-aiMove("regina",I,"nero",X,Y), A=X-1, B=Y+1, A>=0, B<8.
+newDiagonaleS(A,B):-aiMove("regina",I,"nero",X,Y), A=X+1, B=Y-1, A<8, B>=0.
+newDiagonaleS(X,Y):-newDiagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A+1, Y=B-1, X<8, Y>=0.
+newDiagonaleS(X,Y):-newDiagonaleS(A,B), not alleato(X,Y), not nemico(A,B), X=A-1, Y=B+1, Y<8, X>=0.
+
+
+scaccoReBianco(X,Y):-newMove(_,_,_,X,Y), pezzo("re",I,"bianco",X,Y).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
