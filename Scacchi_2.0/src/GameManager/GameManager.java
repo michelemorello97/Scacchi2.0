@@ -1,9 +1,13 @@
 package GameManager;
 
+import java.awt.HeadlessException;
+import java.awt.SystemTray;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
+
+import javax.swing.JOptionPane;
 
 import ai_manager.Ai_Manager;
 import graphic.ChessPanel;
@@ -89,7 +93,9 @@ public class GameManager implements MouseListener{
 		else if(focus!=null) 
 			checkAndMove(x, y);
 		
-			
+		if(scacchiera[y][x]!=null && scacchiera[y][x].getC().contains("nero")){
+			System.out.println(scacchiera[y][x].toString());
+		}
 			
 		
 	}
@@ -251,7 +257,7 @@ public class GameManager implements MouseListener{
 				scacchiera[y][x]=focus;
 				focus=null;
 				mossePossibili.clear();
-				if(scacchiera[y][x].getTipo()=="pedone" && ((scacchiera[y][x].getC()=="bianco" && y==0) || (scacchiera[y][x].getC()=="nero" && y==7)))
+				if(scacchiera[y][x].getTipo().equals("pedone") && ((scacchiera[y][x].getC().equals("bianco") && y==0) || (scacchiera[y][x].getC().equals("nero") && y==7)))
 				{
 					scacchiera[y][x].setTipo("regina");
 					scacchiera[y][x].setIndex(scacchiera[y][x].getIndex()+1);
@@ -282,7 +288,6 @@ public class GameManager implements MouseListener{
 	}
 	public void cambiaTurno() {
 		caricaALL();
-		AiMove m=null;
 		ai.load("/home/michele/git/Scacchi2.0/Scacchi_2.0/src/encodings/AiEnEmY");
 		try {
 			mossePossibili.clear();
@@ -295,9 +300,24 @@ public class GameManager implements MouseListener{
 		}
 		
 		panel.repaint();
+		
+		caricaALL();
+		ai.load("/home/michele/git/Scacchi2.0/Scacchi_2.0/src/encodings/scaccoMatto");
+		try {
+			if(ai.isScaccoMatto()) {
+				JOptionPane.showMessageDialog(null, "Scacco matto! Vincono i Neri!");
+				System.exit(0);
+			}
+		} catch (HeadlessException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException | InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
 	}
 	
 	public void trovaMossa(AiMove m) {
+		if(!(m.getTipo().equals("ScaccoMatto"))) {
 		String tipo=m.getTipo().substring(1, m.getTipo().length()-1);
 		String colore= m.getC().substring(1, m.getC().length()-1);
 		//scacchiera[m.getY()][m.getX()]=new Pezzo(tipo, m.getIndex(), colore, m.getX(), m.getY());
@@ -306,10 +326,22 @@ public class GameManager implements MouseListener{
 			for(int j=0; j<8; j++) {
 				if(scacchiera[i][j]!=null && scacchiera[i][j].getTipo().equals(tipo) && scacchiera[i][j].getC().equals(colore) && scacchiera[i][j].getIndex()==m.getIndex()) {
 					scacchiera[i][j]=null;
+					if(m.getY()==7 && tipo.equals("pedone"))
+						tipo="regina";
+						
 					scacchiera[m.getY()][m.getX()]=new Pezzo(tipo, m.getIndex(), colore, m.getX(), m.getY());
 					break;
 				}
 			}
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "Scacco matto! Vincono i Bianchi!");
+			System.exit(0);
+		}
+	}
+	
+	public void turnAllPedone() {
+		
 	}
 	
 }

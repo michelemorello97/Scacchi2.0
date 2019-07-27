@@ -3,6 +3,8 @@ package ai_manager;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 
+import javax.swing.JOptionPane;
+
 import it.unical.mat.embasp.base.Handler;
 import it.unical.mat.embasp.base.InputProgram;
 import it.unical.mat.embasp.base.Output;
@@ -16,6 +18,7 @@ import model.AiMove;
 import model.Focus;
 import model.Move;
 import model.Pezzo;
+import model.ScaccoMatto;
 
 public class Ai_Manager {
 	Handler handler;
@@ -36,6 +39,7 @@ public class Ai_Manager {
 			ASPMapper.getInstance().registerClass(Move.class);
 			ASPMapper.getInstance().registerClass(Focus.class);
 			ASPMapper.getInstance().registerClass(AiMove.class);
+			ASPMapper.getInstance().registerClass(ScaccoMatto.class);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -112,7 +116,9 @@ public class Ai_Manager {
 			}
 			
 		}
-		System.out.println(m.toString());
+		if(m.getTipo()==null)
+			m.setTipo("ScaccoMatto");
+			System.out.println(m.toString());
 		
 		
 		
@@ -122,8 +128,42 @@ public class Ai_Manager {
 		program.clearFilesPaths();
 		facts.clearAll();
 		
-		
 		return m;
+		
+	}
+	
+	
+	
+	
+	public boolean isScaccoMatto() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, InstantiationException {
+		ScaccoMatto s=new ScaccoMatto();
+		handler.addProgram(facts);
+		//Move m=new Move();
+		
+		output = handler.startSync();
+		answers = (AnswerSets) output;
+		
+		for(AnswerSet a: answers.getAnswersets()) {
+			for(Object obj: a.getAtoms()) {
+				if(obj instanceof AiMove) 
+					s=((ScaccoMatto) obj);
+					
+				
+				}
+			
+		}
+		System.out.println(s.getVal());
+		
+		
+		handler.removeProgram(facts);
+		handler.removeProgram(program);
+
+		program.clearFilesPaths();
+		facts.clearAll();
+		if(s.getVal()==1)
+			return true;
+		return false;
+		
 	}
 }
 
