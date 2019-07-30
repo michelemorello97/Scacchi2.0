@@ -27,10 +27,10 @@ moveE("pedone",I,"nero",X,Y):-pezzo("pedone",I,"nero",A,B), Y=B+1, X=A-1.
 moveE("torre",I,"nero",X,Y):-nearVtorre("torre",I,"nero",X,Y), pezzo("torre",I,"nero",A,Y), A!=X.
 moveE("torre",I,"nero",X,Y):-nearOtorre("torre",I,"nero",X,Y), pezzo("torre",I,"nero",X,B), B!=Y.
 
-moveE("torre",I,"nero",X,Y):-nearVtorre("torre",I,"nero",A,Y), X=A+1, X<8, nemico(X,Y), not pezzo("torre",I,"nero",X,Y).
-moveE("torre",I,"nero",X,Y):-nearVtorre("torre",I,"nero",A,Y), X=A-1, X>=0, nemico(X,Y), not pezzo("torre",I,"nero",X,Y).
-moveE("torre",I,"nero",X,Y):-nearOtorre("torre",I,"nero",X,B), Y=B+1, Y<8, nemico(X,Y), not pezzo("torre",I,"nero",X,Y).
-moveE("torre",I,"nero",X,Y):-nearOtorre("torre",I,"nero",X,B), Y=B-1, Y>=0, nemico(X,Y), not pezzo("torre",I,"nero",X,Y).
+moveE("torre",I,"nero",X,Y):-nearVtorre("torre",I,"nero",A,Y), X=A+1, X<8, not alleato(A,Y), nemico(X,Y), not pezzo("torre",I,"nero",X,Y).
+moveE("torre",I,"nero",X,Y):-nearVtorre("torre",I,"nero",A,Y), X=A-1, X>=0, not alleato(A,Y), nemico(X,Y), not pezzo("torre",I,"nero",X,Y).
+moveE("torre",I,"nero",X,Y):-nearOtorre("torre",I,"nero",X,B), Y=B+1, Y<8, not alleato(X,B), nemico(X,Y), not pezzo("torre",I,"nero",X,Y).
+moveE("torre",I,"nero",X,Y):-nearOtorre("torre",I,"nero",X,B), Y=B-1, Y>=0, not alleato(X,B), nemico(X,Y), not pezzo("torre",I,"nero",X,Y).
 
 %CALCOLO DEI NEAR Verticale
 nearVtorre("torre",I,"nero",X,Y):-pezzo("torre",I,"nero",X,Y).
@@ -63,10 +63,10 @@ nearcavallo("cavallo",I,"nero",X,Y):-pezzo("cavallo",I,"nero",A,B), X=A+2, Y=B+1
 moveE("alfiere",I,"nero",X,Y):-pezzo("alfiere",I,"nero",A,B), diagonalealfiereP("alfiere",I,"nero",X,Y), A!=X, B!=Y.
 moveE("alfiere",I,"nero",X,Y):-pezzo("alfiere",I,"nero",A,B), diagonalealfiereS("alfiere",I,"nero",X,Y), A!=X, B!=Y.
 
-moveE("alfiere",I,"nero",X,Y):- diagonalealfiereP("alfiere",I,"nero",A,B), X=A-1, Y=B-1, X>=0, Y>=0, nemico(X,Y), not pezzo("alfiere",I,"nero",X,Y).
-moveE("alfiere",I,"nero",X,Y):- diagonalealfiereP("alfiere",I,"nero",A,B), X=A+1, Y=B+1, X<8, Y<8, nemico(X,Y), not pezzo("alfiere",I,"nero",X,Y).
-moveE("alfiere",I,"nero",X,Y):- diagonalealfiereS("alfiere",I,"nero",A,B), X=A+1, Y=B-1, X<8, Y>=0, nemico(X,Y), not pezzo("alfiere",I,"nero",X,Y).
-moveE("alfiere",I,"nero",X,Y):- diagonalealfiereS("alfiere",I,"nero",A,B), X=A-1, Y=B+1, X>=0, Y<8, nemico(X,Y), not pezzo("alfiere",I,"nero",X,Y).
+moveE("alfiere",I,"nero",X,Y):- diagonalealfiereP("alfiere",I,"nero",A,B), X=A-1, Y=B-1, X>=0, Y>=0, not alleato(A,B), nemico(X,Y), not pezzo("alfiere",I,"nero",X,Y).
+moveE("alfiere",I,"nero",X,Y):- diagonalealfiereP("alfiere",I,"nero",A,B), X=A+1, Y=B+1, X<8, Y<8, not alleato(A,B), nemico(X,Y), not pezzo("alfiere",I,"nero",X,Y).
+moveE("alfiere",I,"nero",X,Y):- diagonalealfiereS("alfiere",I,"nero",A,B), X=A+1, Y=B-1, X<8, Y>=0, not alleato(A,B), nemico(X,Y), not pezzo("alfiere",I,"nero",X,Y).
+moveE("alfiere",I,"nero",X,Y):- diagonalealfiereS("alfiere",I,"nero",A,B), X=A-1, Y=B+1, X>=0, Y<8, not alleato(A,B), nemico(X,Y), not pezzo("alfiere",I,"nero",X,Y).
 
 
 
@@ -86,19 +86,19 @@ diagonalealfiereS("alfiere",I,"nero",X,Y):-diagonalealfiereS("alfiere",I,"nero",
 moveE("regina",I,"nero",X,Y):-pezzo("regina",I,"nero",A,B), nearreginaO("regina",I,"nero",X,Y), A!=X.
 moveE("regina",I,"nero",X,Y):-pezzo("regina",I,"nero",A,B), nearreginaV("regina",I,"nero",X,Y), B!=Y.
 
-moveE("regina",I,"nero",X,Y):- nearreginaO("regina",I,"nero",A,Y), X=A+1, X<8, nemico(X,Y), not pezzo("regina",I,"nero",X,Y).
-moveE("regina",I,"nero",X,Y):- nearreginaO("regina",I,"nero",A,Y), X=A-1, X>=0, nemico(X,Y), not pezzo("regina",I,"nero",X,Y).
-moveE("regina",I,"nero",X,Y):-nearreginaV("regina",I,"nero",X,B), Y=B+1, Y<8, nemico(X,Y), not pezzo("regina",I,"nero",X,Y).
-moveE("regina",I,"nero",X,Y):-nearreginaV("regina",I,"nero",X,B), Y=B-1, Y>=0, nemico(X,Y), not pezzo("regina",I,"nero",X,Y).
+moveE("regina",I,"nero",X,Y):- nearreginaO("regina",I,"nero",A,Y), X=A+1, X<8, nemico(X,Y), not alleato(A,Y), not pezzo("regina",I,"nero",X,Y).
+moveE("regina",I,"nero",X,Y):- nearreginaO("regina",I,"nero",A,Y), X=A-1, X>=0, nemico(X,Y), not alleato(A,Y), not pezzo("regina",I,"nero",X,Y).
+moveE("regina",I,"nero",X,Y):-nearreginaV("regina",I,"nero",X,B), Y=B+1, Y<8, nemico(X,Y), not alleato(X,B), not pezzo("regina",I,"nero",X,Y).
+moveE("regina",I,"nero",X,Y):-nearreginaV("regina",I,"nero",X,B), Y=B-1, Y>=0, nemico(X,Y), not alleato(X,B), not pezzo("regina",I,"nero",X,Y).
 
 
 moveE("regina",I,"nero",X,Y):-pezzo("regina",I,"nero",A,B), diagonalereginaP("regina",I,"nero",X,Y), A!=X, B!=Y.
 moveE("regina",I,"nero",X,Y):-pezzo("regina",I,"nero",A,B), diagonalereginaS("regina",I,"nero",X,Y), A!=X, B!=Y.
 
-moveE("regina",I,"nero",X,Y):- diagonalereginaP("regina",I,"nero",A,B), X=A-1, Y=B-1, X>=0, Y>=0, nemico(X,Y), not pezzo("regina",I,"nero",X,Y).
-moveE("regina",I,"nero",X,Y):- diagonalereginaP("regina",I,"nero",A,B), X=A+1, Y=B+1, X<8, Y<8, nemico(X,Y), not pezzo("regina",I,"nero",X,Y).
-moveE("regina",I,"nero",X,Y):- diagonalereginaS("regina",I,"nero",A,B), X=A+1, Y=B-1, X<8, Y>=0, nemico(X,Y), not pezzo("regina",I,"nero",X,Y).
-moveE("regina",I,"nero",X,Y):- diagonalereginaS("regina",I,"nero",A,B), X=A-1, Y=B+1, X>=0, Y<8, nemico(X,Y), not pezzo("regina",I,"nero",X,Y).
+moveE("regina",I,"nero",X,Y):- diagonalereginaP("regina",I,"nero",A,B), X=A-1, Y=B-1, X>=0, Y>=0, not alleato(A,B), nemico(X,Y), not pezzo("regina",I,"nero",X,Y).
+moveE("regina",I,"nero",X,Y):- diagonalereginaP("regina",I,"nero",A,B), X=A+1, Y=B+1, X<8, Y<8, not alleato(A,B), nemico(X,Y), not pezzo("regina",I,"nero",X,Y).
+moveE("regina",I,"nero",X,Y):- diagonalereginaS("regina",I,"nero",A,B), X=A+1, Y=B-1, X<8, Y>=0, not alleato(A,B), nemico(X,Y), not pezzo("regina",I,"nero",X,Y).
+moveE("regina",I,"nero",X,Y):- diagonalereginaS("regina",I,"nero",A,B), X=A-1, Y=B+1, X>=0, Y<8, not alleato(A,B), nemico(X,Y), not pezzo("regina",I,"nero",X,Y).
 
 
 

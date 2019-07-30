@@ -288,7 +288,8 @@ public class GameManager implements MouseListener{
 	}
 	public void cambiaTurno() {
 		caricaALL();
-		ai.load("/home/michele/git/Scacchi2.0/Scacchi_2.0/src/encodings/AiEnEmY");
+		//ai.load("/home/michele/git/Scacchi2.0/Scacchi_2.0/src/encodings/AiEnEmY");
+		ai.load("/home/michele/git/Scacchi2.0/Scacchi_2.0/src/encodings/aiEnemy2");
 		try {
 			mossePossibili.clear();
 			//trovaMossa(ai.startAI());
@@ -317,31 +318,34 @@ public class GameManager implements MouseListener{
 	}
 	
 	public void trovaMossa(AiMove m) {
-		if(!(m.getTipo().equals("ScaccoMatto"))) {
-		String tipo=m.getTipo().substring(1, m.getTipo().length()-1);
-		String colore= m.getC().substring(1, m.getC().length()-1);
-		//scacchiera[m.getY()][m.getX()]=new Pezzo(tipo, m.getIndex(), colore, m.getX(), m.getY());
 		
-		for(int i=0; i<8; i++)
-			for(int j=0; j<8; j++) {
-				if(scacchiera[i][j]!=null && scacchiera[i][j].getTipo().equals(tipo) && scacchiera[i][j].getC().equals(colore) && scacchiera[i][j].getIndex()==m.getIndex()) {
-					scacchiera[i][j]=null;
-					if(m.getY()==7 && tipo.equals("pedone"))
-						tipo="regina";
-						
-					scacchiera[m.getY()][m.getX()]=new Pezzo(tipo, m.getIndex(), colore, m.getX(), m.getY());
-					break;
-				}
-			}
-		}
-		else {
+		if(m.getTipo().equals("ScaccoMatto")){
 			JOptionPane.showMessageDialog(null, "Scacco matto! Vincono i Bianchi!");
 			System.exit(0);
 		}
+		else if(m.getTipo().equals("stallo")) {
+			JOptionPane.showMessageDialog(null, "Stallo! Pareggio!");
+			System.exit(0);
+		}
+		else {
+			String tipo=m.getTipo().substring(1, m.getTipo().length()-1);
+			String colore= m.getC().substring(1, m.getC().length()-1);
+			//scacchiera[m.getY()][m.getX()]=new Pezzo(tipo, m.getIndex(), colore, m.getX(), m.getY());
+			
+			for(int i=0; i<8; i++)
+				for(int j=0; j<8; j++) {
+					if(scacchiera[i][j]!=null && scacchiera[i][j].getTipo().equals(tipo) && scacchiera[i][j].getC().equals(colore) && scacchiera[i][j].getIndex()==m.getIndex()) {
+						scacchiera[i][j]=null;
+						if(m.getY()==7 && tipo.equals("pedone"))
+							tipo="regina";
+							
+						scacchiera[m.getY()][m.getX()]=new Pezzo(tipo, m.getIndex(), colore, m.getX(), m.getY());
+						break;
+					}
+				}
+		}
 	}
 	
-	public void turnAllPedone() {
-		
-	}
+	
 	
 }

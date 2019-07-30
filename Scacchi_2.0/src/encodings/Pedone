@@ -19,8 +19,8 @@ alleato(X,Y):-pezzo(_,_,"bianco",X,Y).
 %GENERAZIONE DELLE POSIZIONI RAGGIUNGIBILI
 move(P,I,"bianco",X,4)|out(P,I,"bianco",X,4):-focus(P,I,"bianco",X,6),not occupata(X,4),not occupata(X,5).
 move(P,I,"bianco",X,Y)|out(P,I,"bianco",X,Y):-focus(P,I,"bianco",X,Z),Y=Z-1, not occupata(X,Y), Y>=0.
-move(P,I,"bianco",X,Y)|out(P,I,"bianco",X,Y):-focus(P,I,"bianco",A,B),X=A-1,Y=B-1,nemico(X,Y).
-move(P,I,"bianco",X,Y)|out(P,I,"bianco",X,Y):-focus(P,I,"bianco",A,B),X=A+1,Y=B-1,nemico(X,Y).
+move(P,I,"bianco",X,Y)|out(P,I,"bianco",X,Y):-focus(P,I,"bianco",A,B),X=A-1,Y=B-1,nemico(X,Y), X>=0, Y>=0.
+move(P,I,"bianco",X,Y)|out(P,I,"bianco",X,Y):-focus(P,I,"bianco",A,B),X=A+1,Y=B-1,nemico(X,Y), X<8, Y>=0.
 
 %vincoli per pericolo orizzontale e verticale
 :-pericolo(X,Y), cellaAttaccata(_,_,3), move(P,I,C,_,_).

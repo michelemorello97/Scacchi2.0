@@ -178,8 +178,8 @@ path(X,Y,2):-path(A,B,2), not occupata(A,B), X=A+1, Y=B-1, X<8, Y>=0.
 path(X,Y,6):-path(A,B,6), not occupata(A,B), X=A-1, Y=B+1, X>=0, Y<8.
 
 cellaDifesa(X,Y):-move(_,_,_,X,Y), path(X,Y,_).
-%	    7 4              7 4        7 4
-scaccoMatto(1):-#count{X,Y: cellaDifesa(X,Y)}=0, scaccoRe(_,_,_,_,_).
+
+scaccoMatto(1):-#count{X,Y: cellaDifesa(X,Y)}=0, scaccoRe(_,_,_,_,_), #count{X,Y: move("re",I,"bianco",X,Y)}=0.
 scaccoMatto(1):-#count{P,I: move(P,I,_,_,_)}=0.
 
 %croce

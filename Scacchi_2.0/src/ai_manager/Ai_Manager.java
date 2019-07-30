@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 
 import it.unical.mat.embasp.base.Handler;
 import it.unical.mat.embasp.base.InputProgram;
+import it.unical.mat.embasp.base.OptionDescriptor;
 import it.unical.mat.embasp.base.Output;
 import it.unical.mat.embasp.languages.asp.ASPInputProgram;
 import it.unical.mat.embasp.languages.asp.ASPMapper;
@@ -19,6 +20,7 @@ import model.Focus;
 import model.Move;
 import model.Pezzo;
 import model.ScaccoMatto;
+import model.scaccoRe;
 
 public class Ai_Manager {
 	Handler handler;
@@ -40,6 +42,7 @@ public class Ai_Manager {
 			ASPMapper.getInstance().registerClass(Focus.class);
 			ASPMapper.getInstance().registerClass(AiMove.class);
 			ASPMapper.getInstance().registerClass(ScaccoMatto.class);
+			ASPMapper.getInstance().registerClass(scaccoRe.class);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -100,6 +103,7 @@ public class Ai_Manager {
 	
 	public AiMove startAI() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, InstantiationException {
 		AiMove m=new AiMove();
+		scaccoRe s=new scaccoRe();
 		handler.addProgram(facts);
 		//Move m=new Move();
 		
@@ -110,21 +114,25 @@ public class Ai_Manager {
 			for(Object obj: a.getAtoms()) {
 				if(obj instanceof AiMove) {
 					m=((AiMove) obj);
+					System.out.println(m.toString());
 				}
-				if(obj instanceof Focus)
+				else if(obj instanceof Focus)
 					System.out.println(((Focus) obj).toString());
+				else if(obj instanceof scaccoRe)
+					s=((scaccoRe) obj);
 			}
 			
 		}
-		if(m.getTipo()==null)
+		if(m.getTipo()==null && s.getVal()==1) {
 			m.setTipo("ScaccoMatto");
 			System.out.println(m.toString());
-		
+		}
+		else if(m.getTipo()==null && s.getVal()==0)
+			m.setTipo("stallo");
 		
 		
 		handler.removeProgram(facts);
 		handler.removeProgram(program);
-
 		program.clearFilesPaths();
 		facts.clearAll();
 		
@@ -145,7 +153,7 @@ public class Ai_Manager {
 		
 		for(AnswerSet a: answers.getAnswersets()) {
 			for(Object obj: a.getAtoms()) {
-				if(obj instanceof AiMove) 
+				if(obj instanceof ScaccoMatto) 
 					s=((ScaccoMatto) obj);
 					
 				
