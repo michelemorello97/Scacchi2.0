@@ -3,6 +3,7 @@
 
 aiMove(P,I,"nero",X,Y)|out(P,I,"nero",X,Y):-move(P,I,"nero",X,Y).
 :~#count{P,I,C,X,Y: aiMove(P,I,C,X,Y)}!=1.  [1@7, 3]
+
 %CALCOLO DEI POSSIBILI OSTACOLI
 alleato(X,Y):-pezzo(_,_,"nero",X,Y).
 nemico(X,Y):-pezzo(_,_,"bianco",X,Y).
@@ -17,7 +18,7 @@ move("pedone",I,"nero",X,Y):-pezzo("pedone",I,"nero",A,B), Y=B+1, not occupata(X
 move("pedone",I,"nero",X,3):-pezzo("pedone",I,"nero",X,1), not occupata(X,2), not occupata(X,3).
 
 
-%PER CALCOLARMI I MOIMENTI IN BASE AI NEAR, PRIMA VERTICALE E POI ORIZZONTALE
+%PER CALCOLARMI I MOVIMENTI IN BASE AI NEAR, PRIMA VERTICALE E POI ORIZZONTALE
 move("torre",I,"nero",X,Y):-pezzo("torre",I,"nero",X,B), nearVtorre("torre",I,"nero",X,Y), B!=Y.
 move("torre",I,"nero",X,Y):-pezzo("torre",I,"nero",A,Y), nearOtorre("torre",I,"nero",X,Y), A!=X.
 
@@ -482,14 +483,8 @@ pericolo(P,I,"nero",X,Y,6):- path(X,Y,6), focus(P,I,"nero", X,Y).
 
 
 
-%IL MANGIO DEL PEZZO AL PEZZO
-%canEat(P,I,"bianco",X,Y):-move(F, K,"nero",X,Y), pezzo(P,I,"bianco",X,Y).
-
-%WEAK CHE NON MANGIO
-%:~ #count{P,I,X,Y:canEat(P,I,C,X,Y)}=0. [2@6, 1]
 
 %WEAK DEL PEZZO CHE PREFERISCE MANGIARE ROBA FORTE
-%:~pezzo(P,I,"nero",X,Y), cellaCoperta(X,Y), not focus(P,I,"nero",X,Y), P!="pedone". [1@3,X,Y]
 
 :~ aiMove(P,I,"nero",X,Y), not nemico(X,Y), cellaCoperta(X,Y). [2@6,X,Y]
 :~ aiMove(P,I,"nero",X,Y), not nemico(X,Y), not cellaCoperta(X,Y). [1@6,X,Y]
@@ -509,8 +504,6 @@ pericolo(P,I,"nero",X,Y,6):- path(X,Y,6), focus(P,I,"nero", X,Y).
 :~ aiMove(P,I,"nero",X,Y), pezzo("regina",J,"bianco",X,Y), cellaCoperta(X,Y). [2@2,X,Y]
 :~ aiMove(P,I,"nero",X,Y), pezzo("regina",J,"bianco",X,Y), not cellaCoperta(X,Y). [1@2,X,Y]
 
-%:~ pezzo("re",J,"bianco",A,B),not scaccoReBianco(A,B). [2@6, 2]
-%:~ scaccoReBianco(A,B), aiMove(P,I,"nero",X,Y), moveE(P1,J,"bianco",X,Y). [1@6, 2] 
 
 cellaCoperta(X,Y):- moveE(E,J,"bianco",X,Y).
 
